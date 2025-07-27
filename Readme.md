@@ -30,4 +30,13 @@ Note:- As mongoDB is a noSQL database so there are collections not tables
       3. after checking make it use and transfer all inside data in auth controller using async fn
 10. Form mongo dv cluster and .env file in backend
 11. connect db in another file and import in index.js
-  
+
+12. Make user model
+13. To use req.body() for taking information of user use app.use(express.json()) in index
+14. Form signup controller and encrypt password with JWT
+15. Form jwt token for encrypting pass in lib-utils
+16. write JWT secret in .env
+OPEN GITBASH in terminal and type:- openssl rand -base64 32 to get JWT secret(random)
+17. Test it in postman for signup
+app.use(express.urlencoded({ extended: true })); // to parse form data
+use this if needed
