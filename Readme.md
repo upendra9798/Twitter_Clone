@@ -40,3 +40,7 @@ OPEN GITBASH in terminal and type:- openssl rand -base64 32 to get JWT secret(ra
 17. Test it in postman for signup
 app.use(express.urlencoded({ extended: true })); // to parse form data
 use this if needed
+18. Login code and test it in postman
+19. Logout by token
+20. getMe route:- using protectRoute Middelware(used cookieParser)
+**********AUTHORIZATION PART DONE***********

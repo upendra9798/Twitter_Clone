@@ -89,7 +89,25 @@ coverImg: user.coverImg,
     }
 }
 export const logout = async (req,res) => {
-    res.json({
-        data:"Logged out"
-    })
+    try {
+       res.cookie("jwt","",{maxAge:0})
+       res.status(200).json({message:"Logged out successfully"})
+//        The first parameter "jwt" is the name of the cookie.
+// The second parameter "" sets the cookie value to an empty string.
+// { maxAge: 0 } tells the browser to immediately expire the cookie.
+       //No JWT is present → request is unauthenticated → user is treated as logged out.
+    } catch (error) {
+        console.log("Error in logout controller",error.message);
+        res.status(500).json({error:"Internal Server Error"})        
+    }
+}
+
+export const getMe = async (req,res) => {
+    try {
+        const user = await User.findOne(req.user._id).select("-password")
+        res.status(200).json(user)
+    } catch (error) {
+        console.log("Error in getMe controller",error.message);
+        res.status(500).json({error:"Internal Server Error"})  
+    }
 }
