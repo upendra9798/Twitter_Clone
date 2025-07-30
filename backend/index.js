@@ -1,6 +1,8 @@
 import express from 'express'
 import dotenv from "dotenv"
 import authRoutes from './routes/auth.routes.js'//Don't forget to use .js
+import userRoutes from './routes/user.routes.js'
+
 import connectMongoDB from './db/connectMongoDB.js'
 import cookieParser from 'cookie-parser'
 //as we are using type module
@@ -17,6 +19,7 @@ app.use(express.urlencoded({ extended: true })); // to parse form data
 app.use(cookieParser()); //For protectRoute middelware
 
 app.use("/api/auth",authRoutes)
+app.use("/api/users",userRoutes)
 
 app.listen(PORT,() => { 
     connectMongoDB()  

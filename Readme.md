@@ -44,3 +44,6 @@ use this if needed
 19. Logout by token
 20. getMe route:- using protectRoute Middelware(used cookieParser)
 **********AUTHORIZATION PART DONE***********
+
+21. Created user routes and controllers for managing following, followers,seeing profile and update,changing password
+22. Created user model
