@@ -45,7 +45,12 @@ use this if needed
 20. getMe route:- using protectRoute Middelware(used cookieParser)
 **********AUTHORIZATION PART DONE***********
 
-21. Created user routes and controllers for managing following, followers,seeing profile and update,changing password
+*********USER CONTROLLER********
+21. Created user routes and controllers for managing following, followers,seeing profile and update,changing password,suggested users
 22. Created user model
 23. For uploading profileImg and coverImg set up cloudinary in .env
 24. config it in index and use to upload img
+
+********POST CONTROLLER*******
+25. Create post model 
+26. Make it's routes and controllers

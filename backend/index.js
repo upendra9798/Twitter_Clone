@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from "dotenv"
 import authRoutes from './routes/auth.routes.js'//Don't forget to use .js //as we are using type module 
 import userRoutes from './routes/user.routes.js'
+import postRoutes from './routes/post.routes.js'
 
 import connectMongoDB from './db/connectMongoDB.js'
 import cookieParser from 'cookie-parser'
@@ -26,6 +27,7 @@ app.use(cookieParser()); //For protectRoute middelware
 
 app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
+app.use("/api/posts",postRoutes)
 
 app.listen(PORT,() => { 
     connectMongoDB()  
