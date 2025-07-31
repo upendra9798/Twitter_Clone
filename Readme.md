@@ -47,3 +47,5 @@ use this if needed
 
 21. Created user routes and controllers for managing following, followers,seeing profile and update,changing password
 22. Created user model
+23. For uploading profileImg and coverImg set up cloudinary in .env
+24. config it in index and use to upload img

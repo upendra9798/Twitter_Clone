@@ -1,6 +1,7 @@
 import { Notification } from "../models/notification.model.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import { v2 as cloudinary } from "cloudinary";
 
 export const getUserProfile = async (req, res) => {
   const { username } = req.params; //params for as username is dynamic(differs)
@@ -101,29 +102,25 @@ export const getSuggestedUsers = async (req, res) => {
 };
 
 export const updateUserProfile = async (req, res) => {
-  const { fullName, email, username, currentPassword, newPassword, bio, link } =
-    req.body;
+  const { fullName, email, username, currentPassword, newPassword, bio, link } = req.body;
   let { profileImg, coverImg } = req.body;
   const userId = req.user._id;
   try {
-    const user = await User.findById(userId);
+    let user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
     if (
       (!newPassword && currentPassword) ||
       (!currentPassword && newPassword)
     ) {
-      return res
-        .status(400)
-        .json({
-          error: "Please provide both current password and new password",
-        });
+      return res.status(400).json({
+        error: "Please provide both current password and new password",
+      });
     }
     if (currentPassword && newPassword) {
       const isMatch = await bcrypt.compare(currentPassword, user.password);
       if (!isMatch)
         return res.status(400).json({ error: "Current password is incorrect" });
       if (newPassword.length < 6) {
-        I;
         return res
           .status(400)
           .json({ error: "Password must be at least 6 characters long" });
@@ -131,5 +128,49 @@ export const updateUserProfile = async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(newPassword, salt);
     }
-  } catch (error) {}
+
+     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     if(!emailRegex.test(email)){
+      return res.status(400).json({error:"Invalid email"});
+     }
+
+    if (profileImg) {
+      if(user.profileImg){ //if previously uploaded image it have to be deleted
+        // https://res.cloudinary.com/dyfqon1v6/image/upload/v1712997552/zmxorcxexpdbh8r0bkjb.png
+        await cloudinary.uploader.destroy(user.profileImg.split('/').pop().split(".")[0])
+      //profileImg.split('/') - split all words with / separately 
+      //pop - separates all these words like zmxorcxexpdbh8r0bkjb.png
+      //split(".")[0]- then we are alse splitting . => zmxorcxexpdbh8r0bkjb -left id of img
+      }
+      const uploadedResponse = await cloudinary.uploader.upload(profileImg);
+      profileImg = uploadedResponse.secure_url;
+    }
+    if (coverImg) {
+      if(user.coverImg){
+        await cloudinary.uploader.destroy(user.coverImg.split('/').pop().split('.')[0]);
+      }
+      const uploadedResponse = await cloudinary.uploader.upload(coverImg);
+      coverImg = uploadedResponse.secure_url;
+    }
+
+    user.fullName = fullName || user.fullName;
+    user.email = email || user.email;
+    user.username = username || user.username;
+    user.bio = bio || user.bio;
+    user.link = link || user.link;
+    user.profileImg = profileImg || user.profileImg;
+    user.coverImg = coverImg || user.coverImg;
+
+    user = await user.save();
+
+    //password should be null in response
+    user.password = null;
+
+    return res.status(200).json(user)
+  } catch (error) {
+    console.log("Error in getSuggested Users: ", error.message);
+    res.status(500).json({ error: error.message });
+  }
 };
+
+//4:05:40
