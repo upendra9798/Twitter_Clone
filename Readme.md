@@ -54,3 +54,7 @@ use this if needed
 ********POST CONTROLLER*******
 25. Create post model 
 26. Make it's routes and controllers
+
+********NOTIFICATIONS CONTROLLER*******
+27. Create notification model 
+26. Make it's routes and controllers
