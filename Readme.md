@@ -58,3 +58,10 @@ use this if needed
 ********NOTIFICATIONS CONTROLLER*******
 27. Create notification model 
 26. Make it's routes and controllers
+
+
+
+FRONTEND:-
+1. install tailwind:
+    npm install tailwindcss @tailwindcss/vite  
+  in frontend, make change in vite config, import in App.css
