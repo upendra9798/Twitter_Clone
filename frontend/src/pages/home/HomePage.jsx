@@ -5,6 +5,7 @@ import CreatePost from "./CreatePost";
 
 const HomePage = () => {
 	const [feedType, setFeedType] = useState("forYou");
+	//For seeing your posts or following persons posts
 
 	return (
 		<>
