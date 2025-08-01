@@ -171,6 +171,8 @@ const Post = ({ post }) => {
 							<div
 								className='flex gap-1 items-center cursor-pointer group'
 								onClick={() => document.getElementById("comments_modal" + post._id).showModal()}
+								//getElementById("comments_modal" + post._id :- giving each user comment section different id
+								//so that each user have different comment section
 							>
 								<FaRegComment className='w-4 h-4  text-slate-500 group-hover:text-sky-400' />
 								<span className='text-sm text-slate-500 group-hover:text-sky-400'>
