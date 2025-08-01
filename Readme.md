@@ -59,8 +59,6 @@ use this if needed
 27. Create notification model 
 26. Make it's routes and controllers
 
-
-
 FRONTEND:-
 1. install tailwind:
     npm install tailwindcss @tailwindcss/vite  
@@ -71,3 +69,10 @@ FRONTEND:-
 Note:- React Query (now renamed TanStack Query) is a powerful data-fetching and state management library for React applications.
 React Query helps you fetch, cache, update, and sync data from APIs effortlessly — especially when dealing with asynchronous operations like fetch, axios, etc.
 
+Note:- Basic syntax for writing mutation fn
+const { mutate: commentPost, isPending: isCommenting } = useMutation({
+		mutationFn: async () => {}
+		},
+		onSuccess: () => {},
+		onError: (error) => {},
+    })
