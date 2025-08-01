@@ -15,8 +15,8 @@ const Post = ({ post }) => {
 	const [comment, setComment] = useState("");
 	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();//for deleting post immediately(line 43)
-	// const postOwner = post.user;
-	// const isLiked = post.likes.includes(authUser._id);
+	const postOwner = post.user;
+	const isLiked = post.likes.includes(authUser._id);
 
 	const isMyPost = authUser._id === post.user._id;
 
