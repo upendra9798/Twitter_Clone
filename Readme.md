@@ -65,3 +65,9 @@ FRONTEND:-
 1. install tailwind:
     npm install tailwindcss @tailwindcss/vite  
   in frontend, make change in vite config, import in App.css
+
+2. npm i @tanstack/react-query -> in frontend for using query
+3. npm install react-hot-toast -> in frontend for a toaster
+Note:- React Query (now renamed TanStack Query) is a powerful data-fetching and state management library for React applications.
+React Query helps you fetch, cache, update, and sync data from APIs effortlessly — especially when dealing with asynchronous operations like fetch, axios, etc.
+

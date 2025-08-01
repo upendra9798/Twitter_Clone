@@ -7,8 +7,12 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+//Note:- React Query (now renamed TanStack Query) is a powerful data-fetching
+//  and state management library for React applications.
+// React Query helps you fetch, cache, update, and sync data from APIs effortlessly — 
+// especially when dealing with asynchronous operations like fetch, axios, etc.
 
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
@@ -18,62 +22,62 @@ const SignUpPage = () => {
 		password: "",
 	});
 
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-	// const { mutate, isError, isPending, error } = useMutation({
-	// 	mutationFn: async ({ email, username, fullName, password }) => {
-	// 		try {
-	// 			const res = await fetch("/api/auth/signup", {
-	// 				method: "POST",
-	// 				headers: {
-	// 					"Content-Type": "application/json",
-	// 				},
-	// 				body: JSON.stringify({ email, username, fullName, password }),
-	// 			});
+	const { mutate, isError, isPending, error } = useMutation({
+		mutationFn: async ({ email, username, fullName, password }) => {
+			try {
+				const res = await fetch("/api/auth/signup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, username, fullName, password }),
+			//  this is necessary Because when you send data via fetch(),
+			//  the body must be a string, not a JavaScript object.
+				});
 
-	// 			const data = await res.json();
-	// 			if (!res.ok) throw new Error(data.error || "Failed to create account");
-	// 			console.log(data);
-	// 			return data;
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 			throw error;
-	// 		}
-	// 	},
-	// 	onSuccess: () => {
-	// 		toast.success("Account created successfully");
+				const data = await res.json();
+				if (!res.ok) throw new Error(data.error || "Failed to create account");
+				console.log(data);
+				return data;
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
+		},
+		onSuccess: () => {
+			toast.success("Account created successfully");
+			queryClient.invalidateQueries({ queryKey: ["authUser"] });
+		},
+// 	Yes — ✅ **onSuccess** is built-in to React Query’s useMutation and useQuery hooks.
+// It runs automatically after a mutation or query completes successfully.
 
-	// 		{
-	// 			/* Added this line below, after recording the video. I forgot to add this while recording, sorry, thx. */
-	// 		}
-	// 		queryClient.invalidateQueries({ queryKey: ["authUser"] });
-	// 	},
-	// });
+//Imagine this flow:
+// A user signs up (via useMutation).
+// Their new data is saved in the backend.
+// But your frontend still has the old or no data for the logged-in user.
+// So you call:queryClient.invalidateQueries({ queryKey: ["authUser"] });
+// React Query now re-fetches the latest user data (e.g., profile, auth status).
+	});
 
 	const handleSubmit = (e) => {
 		e.preventDefault(); // page won't reload
-		// mutate(formData);
-    console.log(formData);
-    
+		mutate(formData);
 	};
 
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-  const isError = false;
-
 	return (
 		<div className='max-w-screen-xl mx-auto flex h-screen px-10'>
 			<div className='flex-1 hidden lg:flex items-center  justify-center'>
-        {/* hidden: Hides the element on all screen sizes.
-lg:flex: Overrides hidden starting at the lg breakpoint (≥1024px), making it display: flex. */}
 				<XSvg className='lg:w-2/3 fill-white' />
 			</div>
 			<div className='flex-1 flex flex-col justify-center items-center'>
 				<form className='lg:w-2/3  mx-auto md:mx-20 flex gap-4 flex-col' onSubmit={handleSubmit}>
 					<XSvg className='w-24 lg:hidden fill-white' />
-          {/* lg:hidden-Hidden on large */}
 					<h1 className='text-4xl font-extrabold text-white'>Join today.</h1>
 					<label className='input input-bordered rounded flex items-center gap-2'>
 						<MdOutlineMail />
@@ -122,10 +126,9 @@ lg:flex: Overrides hidden starting at the lg breakpoint (≥1024px), making it d
 						/>
 					</label>
 					<button className='btn rounded-full btn-primary text-white'>
-						{/* {isPending ? "Loading..." : "Sign up"} */}
-            Sign up
+						{isPending ? "Loading..." : "Sign up"}
 					</button>
-					{isError && <p className='text-red-500'>Something went wrong</p>}
+					{isError && <p className='text-red-500'>{error.message}</p>}
 				</form>
 				<div className='flex flex-col lg:w-2/3 gap-2 mt-4'>
 					<p className='text-white text-lg'>Already have an account?</p>
