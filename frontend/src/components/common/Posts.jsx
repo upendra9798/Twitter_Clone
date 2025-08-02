@@ -44,7 +44,7 @@ const Posts = ({ feedType, username, userId }) => {
 		},
 	});
 
-	useEffect(() => {
+	useEffect(() => { //fro refetching when clicked on other user profile
 		refetch();
 	}, [feedType, refetch, username]);
 
