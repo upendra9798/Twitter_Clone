@@ -8,6 +8,7 @@ import notificationRoutes from './routes/notification.routes.js'
 import connectMongoDB from './db/connectMongoDB.js'
 import cookieParser from 'cookie-parser'
 import {v2 as cloudinary} from 'cloudinary';
+import path from "path";
 
 dotenv.config()
 
@@ -19,9 +20,10 @@ api_secret: process.env.CLOUDINARY_API_SECRET,
 
 const app = express()
 const PORT = process.env.PORT || 5000
+const __dirname = path.resolve();
 
 // console.log(process.env.MONGO_URI);
-app.use(express.json({limit:"10mb"}))  //to parse req.body
+app.use(express.json({limit:"5mb"}))  //to parse req.body
 //limit shouldn't be too high to prevent DOS(img upload)
 app.use(express.urlencoded({ extended: true })); // to parse form data
 
@@ -31,6 +33,14 @@ app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
 app.use("/api/posts",postRoutes)
 app.use("/api/notifications",notificationRoutes)
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
 
 app.listen(PORT,() => { 
     connectMongoDB()  
