@@ -4,6 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 const Posts = ({ feedType, username, userId }) => {
+	const { data: authUser } = useQuery({
+  queryKey: ["authUser"],
+  queryFn: async () => {
+    const res = await fetch("/api/auth/me");
+    if (!res.ok) {
+      throw new Error("Failed to fetch auth user");
+    }
+    return res.json();
+  },
+});
+
 	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou":
@@ -63,7 +74,7 @@ const Posts = ({ feedType, username, userId }) => {
 			{!isLoading && !isRefetching && posts && (
 				<div>
 					{posts.map((post) => (
-						<Post key={post._id} post={post} />
+						<Post key={post._id} post={post} authUser={authUser} />
 					))}
 				</div>
 			)}

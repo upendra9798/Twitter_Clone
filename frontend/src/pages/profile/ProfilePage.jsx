@@ -28,7 +28,15 @@ const ProfilePage = () => {
 	const { username } = useParams();
 
 	const { follow, isPending } = useFollow();
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+	
+	const { data: authUser } = useQuery({
+		queryKey: ["authUser"],
+		queryFn: async () => {
+			const res = await fetch("/api/auth/me");
+			if (!res.ok) throw new Error("Failed to fetch auth user");
+			return res.json();
+		},
+	});
 
 	const {
 		data: user,
@@ -156,6 +164,7 @@ const ProfilePage = () => {
 											setProfileImg(null);
 											setCoverImg(null);
 										}}
+    //used async so that update btn not shows after updating and appear for a update
 									>
 										{isUpdatingProfile ? "Updating..." : "Update"}
 									</button>

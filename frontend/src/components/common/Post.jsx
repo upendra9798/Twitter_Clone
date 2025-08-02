@@ -11,9 +11,9 @@ import { toast } from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/date";
 
-const Post = ({ post }) => {
+const Post = ({ post,authUser }) => {
 	const [comment, setComment] = useState("");
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+	// const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 	const postOwner = post.user;
 

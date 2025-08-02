@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 const useUpdateUserProfile = () => {
 	const queryClient = useQueryClient();
 
+    //used mutateAsync instead of mytate so that update btn not shows after updating and appear for a update
 	const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useMutation({
 		mutationFn: async (formData) => {
 			try {
