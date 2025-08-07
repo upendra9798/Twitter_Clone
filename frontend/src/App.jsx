@@ -35,14 +35,15 @@ function App() {
 
 	if (isLoading) {
 		return (
-			<div className='h-screen flex justify-center items-center'>
+			<div className='min-h-screen flex justify-center items-center bg-slate-50 dark:bg-slate-900'>
 				<LoadingSpinner size='lg' />
 			</div>
 		);
 	}
 
   return (
-   <div className='flex max-w-6xl mx-auto'>
+   <div className='min-h-screen bg-slate-50 dark:bg-slate-900'>
+		<div className='flex max-w-7xl mx-auto'>
 			{/* Common component, bc it's not wrapped with Routes */}
 			{authUser && <Sidebar authUser={authUser} />}
 			{/* authUser={authUser} :- made changes (without it logout fn not show) */}
@@ -54,8 +55,20 @@ function App() {
 				<Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to='/login' />} />
 			</Routes>
 			{authUser && <RightPanel />}
-			<Toaster />
 		</div>
+		<Toaster 
+			position="top-right"
+			toastOptions={{
+				duration: 4000,
+				style: {
+					background: '#1f2937',
+					color: '#f9fafb',
+					borderRadius: '12px',
+					padding: '12px 16px',
+				},
+			}}
+		/>
+	</div>
   );
 }
 
