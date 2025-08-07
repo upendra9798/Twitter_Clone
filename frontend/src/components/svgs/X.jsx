@@ -1,6 +1,10 @@
-const XSvg = (props) => (
+const ConnectLogo = (props) => (
 	<svg aria-hidden='true' viewBox='0 0 24 24' {...props}>
-		<path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
+		<path d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z'/>
+		<path d='M8 12l2 2 4-4' stroke='currentColor' strokeWidth='2' fill='none' strokeLinecap='round' strokeLinejoin='round'/>
+		<circle cx='12' cy='8' r='1.5' fill='currentColor'/>
+		<circle cx='16' cy='12' r='1.5' fill='currentColor'/>
+		<circle cx='8' cy='16' r='1.5' fill='currentColor'/>
 	</svg>
 );
-export default XSvg;
+export default ConnectLogo;
