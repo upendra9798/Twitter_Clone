@@ -48,11 +48,11 @@ app.use("/api/notifications",notificationRoutes)
 // });
 // }
 if (process.env.NODE_ENV === "production") {
-	const distDir = path.join(__dirname, "../frontend/dist");
-	const indexHtml = path.join(distDir, "index.html");
+	const publicDir = path.join(__dirname, "public");
+	const indexHtml = path.join(publicDir, "index.html");
 
 	if (fs.existsSync(indexHtml)) {
-		app.use(express.static(distDir));
+		app.use(express.static(publicDir));
 		app.get(/.*/, (req, res) => {
 			res.sendFile(indexHtml);
 		});
@@ -63,6 +63,7 @@ if (process.env.NODE_ENV === "production") {
 		});
 	}
 }
+
 
 app.listen(PORT,() => { 
     connectMongoDB()  
