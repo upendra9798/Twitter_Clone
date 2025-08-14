@@ -34,17 +34,33 @@ app.use("/api/users",userRoutes)
 app.use("/api/posts",postRoutes)
 app.use("/api/notifications",notificationRoutes)
 
+// if (process.env.NODE_ENV === "production") {
+//    //NOTE:- WRONG BECAUSE IT IS WHEN PACKAGE IS OUTSIDE BACKEND FOLDER
+
+// //     app.use(express.static(path.join(__dirname, "/frontend/dist")));
+// // res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+
+// 	app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// app.get(/.*/, (req, res) => {
+// 	res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+// });
+// }
 if (process.env.NODE_ENV === "production") {
-   //NOTE:- WRONG BECAUSE IT IS WHEN PACKAGE IS OUTSIDE BACKEND FOLDER
+	const distDir = path.join(__dirname, "../frontend/dist");
+	const indexHtml = path.join(distDir, "index.html");
 
-//     app.use(express.static(path.join(__dirname, "/frontend/dist")));
-// res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-
-	app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-app.get(/.*/, (req, res) => {
-	res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
-});
+	if (fs.existsSync(indexHtml)) {
+		app.use(express.static(distDir));
+		app.get(/.*/, (req, res) => {
+			res.sendFile(indexHtml);
+		});
+	} else {
+		console.warn(`Frontend build not found at ${indexHtml}. Skipping static serving.`);
+		app.get("/", (req, res) => {
+			res.status(200).send("API is running, frontend build not found.");
+		});
+	}
 }
 
 app.listen(PORT,() => { 
