@@ -48,20 +48,16 @@ app.use("/api/notifications",notificationRoutes)
 // });
 // }
 if (process.env.NODE_ENV === "production") {
-	const publicDir = path.join(__dirname, "public");
-	const indexHtml = path.join(publicDir, "index.html");
+  const distDir = path.join(__dirname, "../frontend/dist");
+  const indexHtml = path.join(distDir, "index.html");
 
-	if (fs.existsSync(indexHtml)) {
-		app.use(express.static(publicDir));
-		app.get(/.*/, (req, res) => {
-			res.sendFile(indexHtml);
-		});
-	} else {
-		console.warn(`Frontend build not found at ${indexHtml}. Skipping static serving.`);
-		app.get("/", (req, res) => {
-			res.status(200).send("API is running, frontend build not found.");
-		});
-	}
+  if (fs.existsSync(indexHtml)) {
+    app.use(express.static(distDir));
+    app.get(/.*/, (req, res) => res.sendFile(indexHtml));
+  } else {
+    console.warn(`Frontend build not found at ${indexHtml}`);
+    app.get("/", (req, res) => res.status(200).send("API is running, frontend build not found."));
+  }
 }
 
 
