@@ -32,7 +32,7 @@ const ProfilePage = () => {
 	const { data: authUser } = useQuery({
 		queryKey: ["authUser"],
 		queryFn: async () => {
-			const res = await fetch(import.meta.env.VITE_BACKEND_URL+"/auth/me");
+			const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`);
 			if (!res.ok) throw new Error("Failed to fetch auth user");
 			return res.json();
 		},
@@ -47,7 +47,7 @@ const ProfilePage = () => {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/users/profile/${username}`);
+				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/profile/${username}`);
 				const data = await res.json();
 				if (!res.ok) {
 					throw new Error(data.error || "Something went wrong");

@@ -27,7 +27,7 @@ const SignUpPage = () => {
 	const { mutate, isError, isPending, error } = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				const res = await fetch(import.meta.env.VITE_BACKEND_URL+"/auth/signup", {
+				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

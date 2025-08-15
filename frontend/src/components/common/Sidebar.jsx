@@ -14,7 +14,7 @@ const Sidebar = ({ authUser }) => {
 	const { mutate: logout } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(import.meta.env.VITE_BACKEND_URL+"/auth/logout", {
+				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
 					method: "POST",
 				});
 				const data = await res.json();

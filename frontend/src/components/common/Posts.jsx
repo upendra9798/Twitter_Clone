@@ -7,7 +7,7 @@ const Posts = ({ feedType, username, userId }) => {
 	const { data: authUser } = useQuery({
   queryKey: ["authUser"],
   queryFn: async () => {
-    const res = await fetch(import.meta.env.VITE_BACKEND_URL+"/auth/me");
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`);
     if (!res.ok) {
       throw new Error("Failed to fetch auth user");
     }
