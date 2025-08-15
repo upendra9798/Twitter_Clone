@@ -13,7 +13,6 @@ export default defineConfig({
       '/api': {
         target: 'https://twitter-clone-27ho.onrender.com/api',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);

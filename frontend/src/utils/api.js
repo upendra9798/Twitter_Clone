@@ -1,5 +1,5 @@
 const baseURL = import.meta.env.PROD 
-  ? 'https://twitter-clone-27ho.onrender.com'
+  ? 'https://twitter-clone-27ho.onrender.com/api'
   : '/api';
 
 export const makeRequest = async (endpoint, options = {}) => {
