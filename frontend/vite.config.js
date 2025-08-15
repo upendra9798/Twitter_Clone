@@ -12,7 +12,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api":{
-      target: "http://localhost:5000",
+      target: "https://twitter-clone-27ho.onrender.com",
       changeOrigin: true,
     },
   }
