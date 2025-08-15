@@ -29,6 +29,7 @@ const LoginPage = () => {
 			try {
 				await makeRequest('/auth/login', {
 					method: 'POST',
+					credentials: "include",
 					body: JSON.stringify({ username, password }),
 				});
 			} catch (error) {
