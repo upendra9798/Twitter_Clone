@@ -7,7 +7,7 @@ const Posts = ({ feedType, username, userId }) => {
 	const { data: authUser } = useQuery({
   queryKey: ["authUser"],
   queryFn: async () => {
-    const res = await fetch("/api/auth/me");
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL+"/auth/me");
     if (!res.ok) {
       throw new Error("Failed to fetch auth user");
     }
@@ -18,15 +18,15 @@ const Posts = ({ feedType, username, userId }) => {
 	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou":
-				return "/api/posts/all";
+				return import.meta.env.VITE_BACKEND_URL+"/posts/all";
 			case "following":
-				return "/api/posts/following";
+				return import.meta.env.VITE_BACKEND_URL+"/posts/following";
 			case "posts":
-				return `/api/posts/user/${username}`;
+				return `import.meta.env.VITE_BACKEND_URL/posts/user/${username}`;
 			case "likes":
-				return `/api/posts/likes/${userId}`;
+				return `import.meta.env.VITE_BACKEND_URL/posts/likes/${userId}`;
 			default:
-				return "/api/posts/all";
+				return import.meta.env.VITE_BACKEND_URL+"/posts/all";
 		}
 	};
 

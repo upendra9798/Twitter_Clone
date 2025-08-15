@@ -30,7 +30,7 @@ const Post = ({ post,authUser }) => {
 	const { mutate: deletePost, isPending: isDeleting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/posts/${post._id}`, {
+				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/posts/${post._id}`, {
 					method: "DELETE",
 				});
 				const data = await res.json();
@@ -52,7 +52,7 @@ const Post = ({ post,authUser }) => {
 	const { mutate: likePost, isPending: isLiking } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/posts/like/${post._id}`, {
+				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/posts/like/${post._id}`, {
 					method: "POST",
 				});
 				const data = await res.json();
@@ -86,7 +86,7 @@ const Post = ({ post,authUser }) => {
 	const { mutate: commentPost, isPending: isCommenting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/posts/comment/${post._id}`, {
+				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/posts/comment/${post._id}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

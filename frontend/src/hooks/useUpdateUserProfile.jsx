@@ -8,7 +8,7 @@ const useUpdateUserProfile = () => {
 	const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useMutation({
 		mutationFn: async (formData) => {
 			try {
-				const res = await fetch(`/api/users/update`, {
+				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/users/update`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

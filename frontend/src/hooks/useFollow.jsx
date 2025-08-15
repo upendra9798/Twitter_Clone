@@ -10,7 +10,7 @@ const useFollow = () => {
 	const { mutate: follow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await fetch(`/api/users/follow/${userId}`, {
+				const res = await fetch(`import.meta.env.VITE_BACKEND_URL/users/follow/${userId}`, {
 					method: "POST",
 				});
 

@@ -9,7 +9,7 @@ const queryClient = new QueryClient({
 		queries: {
 			refetchOnWindowFocus: false,
       //so that it doesn't refetch on every reload
-      // App.jsx:21  GET http://localhost:3000/api/auth/me 401 (Unauthorized)
+      // App.jsx:21  GET http://localhost:3000import.meta.env.VITE_BACKEND_URL/auth/me 401 (Unauthorized)
 		},
 	},
 });
