@@ -7,6 +7,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { MdPassword } from "react-icons/md";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { makeRequest } from "../../../utils/api";
 // import toast from "react-hot-toast";
 
 
@@ -26,21 +27,12 @@ const LoginPage = () => {
 	} = useMutation({
 		mutationFn: async ({ username, password }) => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
+				await makeRequest('/auth/login', {
+					method: 'POST',
 					body: JSON.stringify({ username, password }),
 				});
-
-				const data = await res.json();
-
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
 			} catch (error) {
-				throw new Error(error);
+				throw error;
 			}
 		},
 		onSuccess: () => {
