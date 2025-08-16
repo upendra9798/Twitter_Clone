@@ -26,17 +26,14 @@ const LoginPage = () => {
   } = useMutation({
     mutationFn: async ({ username, password }) => {
       try {
-        await makeRequest("/auth/login", {
-          method: "POST",
-          data: { username, password }, // ✅ use data, not body
-        });
+        await makeRequest.post("/auth/login", { username, password });
       } catch (error) {
         throw error;
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      // toast.success("Logged in")
+      // toast.success("Logged in");
     },
   });
 

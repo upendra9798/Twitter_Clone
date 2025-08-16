@@ -29,10 +29,8 @@ const ProfilePage = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["user", username],
     queryFn: async () => {
-      return await makeRequest(`/users/${username}`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await makeRequest.get(`/users/${username}`);
+      return res.data; // axios responses always have .data
     },
   });
 
