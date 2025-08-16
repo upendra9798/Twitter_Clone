@@ -3,6 +3,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const useFollow = () => {
 	const queryClient = useQueryClient();
@@ -10,17 +11,12 @@ const useFollow = () => {
 	const { mutate: follow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/follow/${userId}`, {
-					method: "POST",
-				});
+				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users/follow/${userId}`, {}, { withCredentials: true });
+				const data = res.data;
 
-				const data = await res.json();
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong!");
-				}
 				return;
 			} catch (error) {
-				throw new Error(error.message);
+				throw new Error(error.response?.data?.error || "Something went wrong!");
 			}
 		},
 		onSuccess: () => {

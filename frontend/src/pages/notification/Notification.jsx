@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 
@@ -14,12 +15,12 @@ const NotificationPage = () => {
 		queryKey: ["notifications"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications`);
-				const data = await res.json();
-				if (!res.ok) throw new Error(data.error || "Something went wrong");
+				const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/notifications`, { withCredentials: true });
+				const data = res.data;
+				if (data.error) throw new Error(data.error || "Something went wrong");
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 	});
@@ -27,15 +28,13 @@ const NotificationPage = () => {
 	const { mutate: deleteNotifications } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications`, {
-					method: "DELETE",
-				});
-				const data = await res.json();
+				const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/notifications`, { withCredentials: true });
+				const data = res.data;
 
-				if (!res.ok) throw new Error(data.error || "Something went wrong");
+				if (data.error) throw new Error(data.error || "Something went wrong");
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: () => {

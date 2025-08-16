@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Sidebar = ({ authUser }) => {
 	//changes:-{ authUser } defined here in place on down and also passed in App.jsx
@@ -14,16 +15,14 @@ const Sidebar = ({ authUser }) => {
 	const { mutate: logout } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
-					method: "POST",
-				});
-				const data = await res.json();
+				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {}, { withCredentials: true });
+				const data = res.data;
 
-				if (!res.ok) {
+				if (data.error) {
 					throw new Error(data.error || "Something went wrong");
 				}
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: () => {

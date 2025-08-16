@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 import useFollow from "../../hooks/useFollow";
 
@@ -11,14 +12,11 @@ const RightPanel = () => {
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/suggested`);
-				const data = await res.json();
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong!");
-				}
+				const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/suggested`, { withCredentials: true });
+				const data = res.data;
 				return data;
 			} catch (error) {
-				throw new Error(error.message);
+				throw new Error(error.response?.data?.error || "Something went wrong!");
 			}
 		},
 	});

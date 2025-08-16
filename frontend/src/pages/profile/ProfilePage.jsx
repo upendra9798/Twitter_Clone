@@ -13,6 +13,7 @@ import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/date";
+import axios from "axios";
 
 import useFollow from "../../hooks/useFollow";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
@@ -32,9 +33,8 @@ const ProfilePage = () => {
 	const { data: authUser } = useQuery({
 		queryKey: ["authUser"],
 		queryFn: async () => {
-			const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`);
-			if (!res.ok) throw new Error("Failed to fetch auth user");
-			return res.json();
+			const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, { withCredentials: true });
+			return res.data;
 		},
 	});
 
@@ -47,14 +47,11 @@ const ProfilePage = () => {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/profile/${username}`);
-				const data = await res.json();
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
+				const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/profile/${username}`, { withCredentials: true });
+				const data = res.data;
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 	});

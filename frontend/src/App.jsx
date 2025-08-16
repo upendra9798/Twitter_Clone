@@ -11,6 +11,7 @@ import RightPanel from "./components/common/RightPanel";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import axios from "axios";
 
 function App() {
 	const { data: authUser, isLoading } = useQuery({
@@ -18,16 +19,13 @@ function App() {
 		queryKey: ["authUser"],
 		queryFn: async () => {
 			try {
-				const res = await fetch('/api/auth/me');
-				const data = await res.json();
+				const res = await axios.get('/api/auth/me', { withCredentials: true });
+				const data = res.data;
 				if (data.error) return null;
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				console.log("authUser is here:", data);
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				if (error.response?.status === 401) return null; // Handle unauthorized gracefully
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		retry: false,

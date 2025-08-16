@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/date";
@@ -30,17 +31,12 @@ const Post = ({ post,authUser }) => {
 	const { mutate: deletePost, isPending: isDeleting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/${post._id}`, {
-					method: "DELETE",
-				});
-				const data = await res.json();
+				const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/posts/${post._id}`, { withCredentials: true });
+				const data = res.data;
 
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: () => {
@@ -52,16 +48,11 @@ const Post = ({ post,authUser }) => {
 	const { mutate: likePost, isPending: isLiking } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/like/${post._id}`, {
-					method: "POST",
-				});
-				const data = await res.json();
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
+				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/like/${post._id}`, {}, { withCredentials: true });
+				const data = res.data;
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: (updatedLikes) => {
@@ -86,21 +77,12 @@ const Post = ({ post,authUser }) => {
 	const { mutate: commentPost, isPending: isCommenting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/comment/${post._id}`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ text: comment }),
-				});
-				const data = await res.json();
+				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/comment/${post._id}`, { text: comment }, { withCredentials: true });
+				const data = res.data;
 
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: () => {

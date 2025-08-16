@@ -2,18 +2,16 @@ import Post from "./Post";
 import PostSkeleton from "../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Posts = ({ feedType, username, userId }) => {
 	const { data: authUser } = useQuery({
-  queryKey: ["authUser"],
-  queryFn: async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/me`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch auth user");
-    }
-    return res.json();
-  },
-});
+		queryKey: ["authUser"],
+		queryFn: async () => {
+			const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, { withCredentials: true });
+			return res.data;
+		},
+	});
 
 	const getPostEndpoint = () => {
 		switch (feedType) {
@@ -41,16 +39,12 @@ const Posts = ({ feedType, username, userId }) => {
 		queryKey: ["posts"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(POST_ENDPOINT);
-				const data = await res.json();
-
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
+				const res = await axios.get(POST_ENDPOINT, { withCredentials: true });
+				const data = res.data;
 
 				return data;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 	});

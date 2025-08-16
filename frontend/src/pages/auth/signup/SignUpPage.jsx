@@ -9,6 +9,7 @@ import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import axios from "axios";
 //Note:- React Query (now renamed TanStack Query) is a powerful data-fetching
 //  and state management library for React applications.
 // React Query helps you fetch, cache, update, and sync data from APIs effortlessly — 
@@ -27,23 +28,14 @@ const SignUpPage = () => {
 	const { mutate, isError, isPending, error } = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ email, username, fullName, password }),
-			//  this is necessary Because when you send data via fetch(),
-			//  the body must be a string, not a JavaScript object.
-				});
-
-				const data = await res.json();
-				if (!res.ok) throw new Error(data.error || "Failed to create account");
+				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, { email, username, fullName, password }, { withCredentials: true });
+				const data = res.data;
+				if (data.error) throw new Error(data.error || "Failed to create account");
 				console.log(data);
 				return data;
 			} catch (error) {
 				console.error(error);
-				throw error;
+				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
 		},
 		onSuccess: () => {
