@@ -1,171 +1,124 @@
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { useAuthContext } from "../context/AuthContext";
-import { useState } from "react";
-import { Camera, MapPin, CalendarDays } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+import Posts from "../../components/common/Posts";
+import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
+import EditProfileModal from "./EditProfileModal";
+
+import { POSTS } from "../../utils/db/dummy";
+
+import { FaArrowLeft } from "react-icons/fa6";
+import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
-import ProfileHeaderSkeleton from "../components/skeletons/ProfileHeaderSkeleton";
-import Posts from "../components/Posts";
-import makeRequest from "../utils/makeRequest"; // ✅ import your helper
+import { MdEdit } from "react-icons/md";
+import { useQuery } from "@tanstack/react-query";
+import { formatMemberSinceDate } from "../../utils/date";
+
+import useFollow from "../../hooks/useFollow";
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
+import { makeRequest } from "../../utils/api";
 
 const ProfilePage = () => {
   const { username } = useParams();
-  const queryClient = useQueryClient();
-  const { authUser } = useAuthContext();
-  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { followMutation } = useFollow();
+  const { updateMutation } = useUpdateUserProfile();
+  const fileInputRef = useRef(null);
 
-  // ✅ Fetch user profile using makeRequest
+  // ✅ Fetch user via makeRequest instead of raw axios
   const { data: user, isLoading } = useQuery({
-    queryKey: ["userProfile", username],
+    queryKey: ["user", username],
     queryFn: async () => {
-      const res = await makeRequest(`/users/profile/${username}`, {
+      return await makeRequest(`/users/${username}`, {
         method: "GET",
+        credentials: "include",
       });
-      return res;
-    },
-  });
-
-  const isMyProfile = authUser?._id === user?._id;
-  const amIFollowing = authUser?.following?.includes(user?._id);
-
-  // ✅ Follow / Unfollow mutation with makeRequest
-  const followMutation = useMutation({
-    mutationFn: async () => {
-      if (amIFollowing) {
-        return makeRequest(`/users/unfollow/${user._id}`, {
-          method: "POST",
-        });
-      } else {
-        return makeRequest(`/users/follow/${user._id}`, {
-          method: "POST",
-        });
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userProfile", username] });
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-    onError: (err) => {
-      toast.error(err?.message || "Action failed");
     },
   });
 
   if (isLoading) return <ProfileHeaderSkeleton />;
 
   return (
-    <div className="flex flex-col border-r border-gray-200 w-full">
-      {/* Cover Image */}
-      <div className="relative w-full h-44 bg-gray-300">
-        {user?.coverImg ? (
-          <img
-            src={user.coverImg}
-            alt="cover"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-200" />
-        )}
-        {isMyProfile && (
-          <button className="absolute top-2 right-2 bg-black/60 text-white p-2 rounded-full">
-            <Camera className="w-5 h-5" />
-          </button>
-        )}
+    <div className="flex flex-col">
+      {/* Header */}
+      <div className="flex items-center gap-4 p-3 border-b border-gray-700">
+        <Link to="/">
+          <FaArrowLeft className="w-5 h-5 text-white" />
+        </Link>
+        <div>
+          <h2 className="text-xl font-bold">{user.fullName}</h2>
+          <p className="text-sm text-gray-400">@{user.username}</p>
+        </div>
       </div>
 
-      {/* Profile section */}
-      <div className="px-4">
-        <div className="flex justify-between">
-          <div className="relative -mt-16">
-            {user?.profileImg ? (
-              <img
-                src={user.profileImg}
-                alt="profile"
-                className="w-32 h-32 rounded-full border-4 border-white object-cover"
-              />
-            ) : (
-              <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-300" />
-            )}
-          </div>
+      {/* Banner & Profile Image */}
+      <div className="relative">
+        <img
+          src={user.bannerImage || "/default-banner.jpg"}
+          alt="Banner"
+          className="w-full h-48 object-cover"
+        />
+        <img
+          src={user.profileImage || "/default-avatar.png"}
+          alt="Profile"
+          className="absolute -bottom-16 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
+        />
+        <button
+          onClick={() => setIsEditModalOpen(true)}
+          className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-full flex items-center gap-2"
+        >
+          <MdEdit /> Edit Profile
+        </button>
+      </div>
 
-          {/* Buttons */}
-          <div className="flex gap-2 mt-2">
-            {isMyProfile ? (
-              <button
-                className="px-4 py-2 rounded-full border border-gray-300 text-sm hover:bg-gray-100"
-                onClick={() => setShowEditProfile(true)}
+      {/* Profile Details */}
+      <div className="mt-20 px-4">
+        <h2 className="text-2xl font-bold">{user.fullName}</h2>
+        <p className="text-gray-400">@{user.username}</p>
+        <p className="mt-2">{user.bio}</p>
+
+        <div className="flex flex-wrap gap-4 text-gray-400 mt-3">
+          {user.link && (
+            <span className="flex items-center gap-1">
+              <FaLink />{" "}
+              <a
+                href={user.link}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500"
               >
-                Edit Profile
-              </button>
-            ) : (
-              <button
-                className={`px-4 py-2 rounded-full text-sm font-medium ${
-                  amIFollowing
-                    ? "bg-white border border-gray-300 hover:bg-gray-100"
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-                onClick={() => followMutation.mutate()}
-                disabled={followMutation.isLoading}
-              >
-                {amIFollowing ? "Unfollow" : "Follow"}
-              </button>
-            )}
-          </div>
+                {user.link}
+              </a>
+            </span>
+          )}
+          <span className="flex items-center gap-1">
+            <IoCalendarOutline /> Joined {formatMemberSinceDate(user.createdAt)}
+          </span>
         </div>
 
-        {/* User Info */}
-        <div className="mt-2">
-          <h1 className="text-lg font-bold">{user?.fullName}</h1>
-          <p className="text-sm text-gray-500">@{user?.username}</p>
-          <p className="mt-2 text-sm">{user?.bio}</p>
-
-          {/* Links & info */}
-          <div className="flex flex-wrap gap-3 mt-3 text-sm text-gray-500">
-            {user?.location && (
-              <span className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" /> {user.location}
-              </span>
-            )}
-
-            {user?.link && (
-              <span className="flex items-center gap-1">
-                <FaLink className="w-3 h-3 text-slate-500" />
-                <a
-                  href={user.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:underline text-blue-500"
-                >
-                  {user.link}
-                </a>
-              </span>
-            )}
-
-            <span className="flex items-center gap-1">
-              <CalendarDays className="w-4 h-4" /> Joined{" "}
-              {new Date(user.createdAt).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}
-            </span>
-          </div>
-
-          {/* Followers / Following */}
-          <div className="flex gap-4 mt-3 text-sm">
-            <span>
-              <b>{user?.following?.length || 0}</b> Following
-            </span>
-            <span>
-              <b>{user?.followers?.length || 0}</b> Followers
-            </span>
-          </div>
+        <div className="flex gap-6 mt-3 text-gray-400">
+          <span>
+            <b>{user.following?.length || 0}</b> Following
+          </span>
+          <span>
+            <b>{user.followers?.length || 0}</b> Followers
+          </span>
         </div>
       </div>
 
       {/* Posts */}
       <div className="mt-4">
-        <Posts userId={user?._id} />
+        <Posts posts={POSTS} />
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <EditProfileModal
+          user={user}
+          onClose={() => setIsEditModalOpen(false)}
+          onUpdate={updateMutation.mutate}
+        />
+      )}
     </div>
   );
 };
