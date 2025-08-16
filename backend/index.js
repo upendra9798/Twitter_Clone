@@ -24,8 +24,11 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 app.use(cors({
-  origin: twitter-clone-gsazfysmk-upendra9798s-projects.vercel.app,
-  credentials: true
+  origin: [
+    "https://twitter-clone-bq752r3ti-upendra9798s-projects.vercel.app", // your vercel frontend
+    "http://localhost:5173" // local dev
+  ],
+  credentials: true, // allow cookies/headers
 }));
 // app.options("*", cors({
 //   origin: allowedOrigin,
