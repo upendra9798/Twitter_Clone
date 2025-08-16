@@ -24,13 +24,13 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 app.use(cors({
-  origin: allowedOrigin,
+  origin: twitter-clone-gsazfysmk-upendra9798s-projects.vercel.app,
   credentials: true
 }));
-app.options("*", cors({
-  origin: allowedOrigin,
-  credentials: true
-}));
+// app.options("*", cors({
+//   origin: allowedOrigin,
+//   credentials: true
+// }));
 
 // Middleware
 app.use(express.json({ limit: "5mb" }));
