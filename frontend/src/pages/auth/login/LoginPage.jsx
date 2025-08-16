@@ -7,7 +7,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { MdPassword } from "react-icons/md";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { makeRequest } from "../../../utils/api";
+import makeRequest from "../../../utils/api";
 // import toast from "react-hot-toast";
 
 const LoginPage = () => {

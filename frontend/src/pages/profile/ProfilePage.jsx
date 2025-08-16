@@ -16,7 +16,7 @@ import { formatMemberSinceDate } from "../../utils/date";
 
 import useFollow from "../../hooks/useFollow";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
-import { makeRequest } from "../../utils/api";
+import makeRequest from "../../utils/api";
 
 const ProfilePage = () => {
   const { username } = useParams();
