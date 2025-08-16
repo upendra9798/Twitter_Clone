@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://twitter-clone-27ho.onrender.com/api',
+        target: 'https://twitter-clone-27ho.onrender.com',
         changeOrigin: true,
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
