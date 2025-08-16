@@ -30,7 +30,7 @@ const LoginPage = () => {
 				await makeRequest('/auth/login', {
 					method: 'POST',
 					credentials: "include",
-					body: JSON.stringify({ username, password }),
+					body: { username, password },
 				});
 			} catch (error) {
 				throw error;
