@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from "dotenv";
-import cors from 'cors'; // ✅ Import cors
+import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import postRoutes from './routes/post.routes.js';
@@ -23,17 +23,25 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
+// ✅ Correct CORS setup
 app.use(cors({
   origin: [
-    "https://twitter-clone-pink-six.vercel.app", // your vercel frontend
-    "http://localhost:5173" // local dev
+    "https://twitter-clone-pink-six.vercel.app", // Vercel frontend
+    "http://localhost:5173"                     // Local dev
   ],
-  credentials: true, // allow cookies/headers
+  credentials: true, // Allow cookies
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-// app.options("*", cors({
-//   origin: allowedOrigin,
-//   credentials: true
-// }));
+
+// ✅ Handle preflight OPTIONS
+app.options("*", cors({
+  origin: [
+    "https://twitter-clone-pink-six.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
 
 // Middleware
 app.use(express.json({ limit: "5mb" }));
