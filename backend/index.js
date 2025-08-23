@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
 
   if (fs.existsSync(indexHtml)) {
     app.use(express.static(distDir));
-    app.get(/.*/, (req, res) => res.sendFile(indexHtml));
+    app.get('*', (req, res) => res.sendFile(indexHtml));
   } else {
     console.warn(`Frontend build not found at ${indexHtml}`);
     app.get("/", (req, res) => res.status(200).send("API is running, frontend build not found."));
