@@ -1,7 +1,10 @@
 // utils/makeRequest.js
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_BACKEND_URL;
+// Add /api prefix to all requests
+const baseURL = `${import.meta.env.VITE_BACKEND_URL.endsWith('/api') 
+  ? import.meta.env.VITE_BACKEND_URL.slice(0, -4) 
+  : import.meta.env.VITE_BACKEND_URL}/api`;
 
 const makeRequest = axios.create({
   baseURL,
