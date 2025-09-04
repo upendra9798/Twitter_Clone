@@ -27,8 +27,10 @@ const __dirname = path.resolve();
 // Production CORS configuration
 app.use(cors({
   origin: [
-    "https://twitter-clone-pink-six.vercel.app",  // Vercel frontend
-    "https://twitter-clone-27ho.onrender.com"     // Render backend
+    "https://twitter-clone-pink-six.vercel.app",     // Original Vercel frontend
+    "https://twitter-clone-git-main-upendra9798s-projects.vercel.app", // New Vercel frontend
+    "https://twitter-clone-27ho.onrender.com",       // Render backend
+    "http://localhost:5173"                          // Local development
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
