@@ -24,15 +24,30 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 // ✅ Correct CORS setup - this middleware handles all CORS logic, including preflight OPTIONS requests.
+// Production CORS configuration
 app.use(cors({
   origin: [
-    "https://twitter-clone-pink-six.vercel.app", // Vercel frontend
-    "http://localhost:5173"                       // Local dev
+    "https://twitter-clone-pink-six.vercel.app",  // Vercel frontend
+    "https://twitter-clone-27ho.onrender.com"     // Render backend
   ],
-  credentials: true, // Allow cookies
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  exposedHeaders: ["set-cookie"]
 }));
+
+/* Development CORS configuration (for reference)
+app.use(cors({
+  origin: [
+    "http://localhost:5173",  // Frontend local dev
+    "http://localhost:5000"   // Backend local dev
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  exposedHeaders: ["set-cookie"]
+}));
+*/
 
 // ❌ Removed redundant preflight OPTIONS handler.
 // app.options("*", cors({
