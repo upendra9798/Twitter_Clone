@@ -42,7 +42,7 @@ const ProfilePage = () => {
   if (isLoading) return <ProfileHeaderSkeleton />;
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col max-w-[600px] mx-auto border-x border-gray-700 min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full sticky top-0 z-10 bg-black">
         <Link to="/">
@@ -55,8 +55,8 @@ const ProfilePage = () => {
       </div>
 
       {/* Banner & Profile Image */}
-      <div className="relative w-full">
-        <div className="w-full h-[200px]">
+      <div className="relative">
+        <div className="aspect-[3/1] max-h-[200px]">
           <img
             src={user.bannerImage || "/cover.png"}
             alt="Banner"
@@ -77,10 +77,10 @@ const ProfilePage = () => {
       </div>
 
       {/* Profile Details */}
-      <div className="mt-20 px-4 w-full">
+      <div className="mt-20 px-4">
         <h2 className="text-2xl font-bold">{user.fullName}</h2>
         <p className="text-gray-400">@{user.username}</p>
-        <p className="mt-2 max-w-2xl">{user.bio}</p>
+        {user.bio && <p className="mt-2">{user.bio}</p>}
 
         <div className="flex flex-wrap gap-4 text-gray-400 mt-3">
           {user.link && (
@@ -90,7 +90,7 @@ const ProfilePage = () => {
                 href={user.link}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-500"
+                className="text-blue-500 hover:underline"
               >
                 {user.link}
               </a>
@@ -102,20 +102,18 @@ const ProfilePage = () => {
         </div>
 
         <div className="flex gap-6 mt-3 text-gray-400">
-          <span>
-            <b>{user.following?.length || 0}</b> Following
+          <span className="hover:underline cursor-pointer">
+            <b className="text-white">{user.following?.length || 0}</b> Following
           </span>
-          <span>
-            <b>{user.followers?.length || 0}</b> Followers
+          <span className="hover:underline cursor-pointer">
+            <b className="text-white">{user.followers?.length || 0}</b> Followers
           </span>
         </div>
       </div>
 
       {/* Posts */}
       <div className="border-t border-gray-700 mt-4">
-        <div className="max-w-[600px] mx-auto">
-          <Posts posts={POSTS} />
-        </div>
+        <Posts posts={POSTS} />
       </div>
 
       {/* Edit Profile Modal */}
