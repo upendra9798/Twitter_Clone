@@ -11,24 +11,24 @@ import RightPanel from "./components/common/RightPanel";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
-import axios from "axios";
+import makeRequest from "./utils/api";
 
 function App() {
 	const { data: authUser, isLoading } = useQuery({
-		// we use queryKey to give a unique name to our query and refer to it later
 		queryKey: ["authUser"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get('/api/auth/me', { withCredentials: true });
-				const data = res.data;
-				if (data.error) return null;
-				return data;
+				const res = await makeRequest.get('/auth/me');
+				console.log('Auth response:', res.data);
+				return res.data;
 			} catch (error) {
-				if (error.response?.status === 401) return null; // Handle unauthorized gracefully
-				throw new Error(error.response?.data?.error || "Something went wrong");
+				console.error('Auth error:', error.response?.data || error.message);
+				if (error.response?.status === 401) return null;
+				throw error;
 			}
 		},
 		retry: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 	});
 
 	if (isLoading) {
