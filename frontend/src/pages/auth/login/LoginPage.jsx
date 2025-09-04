@@ -24,17 +24,19 @@ const LoginPage = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: async ({ username, password }) => {
-      try {
-        await makeRequest.post("/auth/login", { username, password });
-      } catch (error) {
-        throw error;
-      }
+    mutationFn: async (credentials) => {
+      const response = await makeRequest.post("/auth/login", credentials);
+      return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Login successful:", data);
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      // toast.success("Logged in");
+      // toast.success("Logged in successfully");
     },
+    onError: (error) => {
+      console.error("Login error:", error.response?.data || error.message);
+      // toast.error(error.response?.data?.error || "Login failed");
+    }
   });
 
   const handleSubmit = (e) => {
