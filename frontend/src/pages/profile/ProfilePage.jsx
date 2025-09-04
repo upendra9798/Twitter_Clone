@@ -29,8 +29,13 @@ const ProfilePage = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["user", username],
     queryFn: async () => {
-      const res = await makeRequest.get(`/users/${username}`);
-      return res.data; // axios responses always have .data
+      try {
+        const res = await makeRequest.get(`/users/profile/${username}`);
+        return res.data;
+      } catch (error) {
+        console.error('Profile fetch error:', error.response?.data || error.message);
+        throw error;
+      }
     },
   });
 
