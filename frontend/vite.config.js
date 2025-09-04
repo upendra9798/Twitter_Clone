@@ -11,8 +11,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://twitter-clone-27ho.onrender.com',
+        target: process.env.NODE_ENV === 'production' 
+          ? 'https://twitter-clone-27ho.onrender.com'
+          : 'http://localhost:5000',
         changeOrigin: true,
+        secure: false,
+        credentials: true,
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);

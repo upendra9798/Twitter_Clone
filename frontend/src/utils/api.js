@@ -1,9 +1,7 @@
 // utils/makeRequest.js
 import axios from "axios";
 
-const baseURL = import.meta.env.PROD
-  ? "https://twitter-clone-27ho.onrender.com/api" // backend prod
-  : "/api"; // vite proxy in dev
+const baseURL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 const makeRequest = axios.create({
   baseURL,
