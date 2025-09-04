@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+import makeRequest from "../../utils/api";
 
 const CreatePost = () => {
 	const [text, setText] = useState("");
@@ -22,9 +22,8 @@ const CreatePost = () => {
 	} = useMutation({
 		mutationFn: async ({ text, img }) => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/create`, { text, img }, { withCredentials: true });
-				const data = res.data;
-				return data;
+				const res = await makeRequest.post("/posts/create", { text, img });
+				return res.data;
 			} catch (error) {
 				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
