@@ -42,15 +42,15 @@ const ProfilePage = () => {
   if (isLoading) return <ProfileHeaderSkeleton />;
 
   return (
-    <div className="flex flex-col max-w-[600px] mx-auto border-x border-gray-700 min-h-screen">
+    <div className="flex flex-col w-[600px] ml-[275px] border-x border-gray-700 min-h-screen">
       {/* Header */}
-      <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full sticky top-0 z-10 bg-black">
-        <Link to="/">
-          <FaArrowLeft className="w-5 h-5 text-white" />
+      <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full sticky top-0 z-10 bg-black bg-opacity-75 backdrop-blur-sm">
+        <Link to="/" className="rounded-full p-2 hover:bg-gray-900 transition-colors">
+          <FaArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h2 className="text-xl font-bold">{user.fullName}</h2>
-          <p className="text-sm text-gray-400">@{user.username}</p>
+          <h2 className="text-xl font-bold text-neutral-200">{user.fullName}</h2>
+          <p className="text-sm text-neutral-500">{user.tweets?.length || 0} posts</p>
         </div>
       </div>
 
@@ -78,19 +78,19 @@ const ProfilePage = () => {
 
       {/* Profile Details */}
       <div className="mt-20 px-4">
-        <h2 className="text-2xl font-bold">{user.fullName}</h2>
-        <p className="text-gray-400">@{user.username}</p>
-        {user.bio && <p className="mt-2">{user.bio}</p>}
+        <h2 className="text-xl font-bold text-neutral-200">{user.fullName}</h2>
+        <p className="text-neutral-500">@{user.username}</p>
+        {user.bio && <p className="mt-2 text-neutral-200">{user.bio}</p>}
 
-        <div className="flex flex-wrap gap-4 text-gray-400 mt-3">
+        <div className="flex flex-wrap gap-4 text-neutral-500 mt-3">
           {user.link && (
             <span className="flex items-center gap-1">
-              <FaLink />{" "}
+              <FaLink className="text-neutral-500" />{" "}
               <a
                 href={user.link}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-500 hover:underline"
+                className="text-blue-400 hover:underline"
               >
                 {user.link}
               </a>
@@ -101,13 +101,15 @@ const ProfilePage = () => {
           </span>
         </div>
 
-        <div className="flex gap-6 mt-3 text-gray-400">
-          <span className="hover:underline cursor-pointer">
-            <b className="text-white">{user.following?.length || 0}</b> Following
-          </span>
-          <span className="hover:underline cursor-pointer">
-            <b className="text-white">{user.followers?.length || 0}</b> Followers
-          </span>
+        <div className="flex gap-6 mt-3">
+          <button className="hover:underline cursor-pointer">
+            <span className="text-neutral-200 font-bold">{user.following?.length || 0}</span>{" "}
+            <span className="text-neutral-500">Following</span>
+          </button>
+          <button className="hover:underline cursor-pointer">
+            <span className="text-neutral-200 font-bold">{user.followers?.length || 0}</span>{" "}
+            <span className="text-neutral-500">Followers</span>
+          </button>
         </div>
       </div>
 
