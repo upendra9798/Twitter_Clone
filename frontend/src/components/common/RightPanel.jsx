@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
+import makeRequest from "../../utils/api";
 import useFollow from "../../hooks/useFollow";
 
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
@@ -12,7 +11,7 @@ const RightPanel = () => {
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/suggested`, { withCredentials: true });
+				const res = await makeRequest.get('/users/suggested');
 				const data = res.data;
 				return data;
 			} catch (error) {

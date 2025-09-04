@@ -2,13 +2,13 @@ import Post from "./Post";
 import PostSkeleton from "../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import axios from "axios";
+import makeRequest from "../../utils/api";
 
 const Posts = ({ feedType, username, userId }) => {
 	const { data: authUser } = useQuery({
 		queryKey: ["authUser"],
 		queryFn: async () => {
-			const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, { withCredentials: true });
+			const res = await makeRequest.get('/auth/me');
 			return res.data;
 		},
 	});
@@ -16,15 +16,15 @@ const Posts = ({ feedType, username, userId }) => {
 	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou":
-				return import.meta.env.VITE_BACKEND_URL+"/posts/all";
+				return '/posts/all';
 			case "following":
-				return import.meta.env.VITE_BACKEND_URL+"/posts/following";
+				return '/posts/following';
 			case "posts":
-				return `import.meta.env.VITE_BACKEND_URL/posts/user/${username}`;
+				return `/posts/user/${username}`;
 			case "likes":
-				return `import.meta.env.VITE_BACKEND_URL/posts/likes/${userId}`;
+				return `/posts/likes/${userId}`;
 			default:
-				return import.meta.env.VITE_BACKEND_URL+"/posts/all";
+				return '/posts/all';
 		}
 	};
 
@@ -39,7 +39,7 @@ const Posts = ({ feedType, username, userId }) => {
 		queryKey: ["posts"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get(POST_ENDPOINT, { withCredentials: true });
+				const res = await makeRequest.get(POST_ENDPOINT);
 				const data = res.data;
 
 				return data;
