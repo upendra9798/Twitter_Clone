@@ -11,10 +11,10 @@ import axios from "axios";
 
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/date";
+import makeRequest from "../../utils/api";
 
 const Post = ({ post,authUser }) => {
 	const [comment, setComment] = useState("");
-	// const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 	const postOwner = post.user;
 
@@ -31,10 +31,8 @@ const Post = ({ post,authUser }) => {
 	const { mutate: deletePost, isPending: isDeleting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/posts/${post._id}`, { withCredentials: true });
-				const data = res.data;
-
-				return data;
+				const res = await makeRequest.delete(`/posts/${post._id}`);
+				return res.data;
 			} catch (error) {
 				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
@@ -48,9 +46,8 @@ const Post = ({ post,authUser }) => {
 	const { mutate: likePost, isPending: isLiking } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/like/${post._id}`, {}, { withCredentials: true });
-				const data = res.data;
-				return data;
+				const res = await makeRequest.post(`/posts/like/${post._id}`);
+				return res.data;
 			} catch (error) {
 				throw new Error(error.response?.data?.error || "Something went wrong");
 			}
@@ -77,8 +74,8 @@ const Post = ({ post,authUser }) => {
 	const { mutate: commentPost, isPending: isCommenting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/comment/${post._id}`, { text: comment }, { withCredentials: true });
-				const data = res.data;
+				const res = await makeRequest.post(`/posts/comment/${post._id}`, { text: comment });
+				return res.data;
 
 				return data;
 			} catch (error) {

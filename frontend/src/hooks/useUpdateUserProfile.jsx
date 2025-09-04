@@ -9,7 +9,7 @@ const useUpdateUserProfile = () => {
 	const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useMutation({
 		mutationFn: async (formData) => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users/update`, formData, { withCredentials: true });
+				const res = await makeRequest.post('/users/update', formData);
 				const data = res.data;
 				return data;
 			} catch (error) {

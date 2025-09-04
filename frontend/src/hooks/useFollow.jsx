@@ -3,7 +3,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import axios from "axios";
+import makeRequest from "../utils/api";
 
 const useFollow = () => {
 	const queryClient = useQueryClient();
@@ -11,8 +11,8 @@ const useFollow = () => {
 	const { mutate: follow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users/follow/${userId}`, {}, { withCredentials: true });
-				const data = res.data;
+				const res = await makeRequest.post(`/users/follow/${userId}`);
+				return res.data;
 
 				return;
 			} catch (error) {

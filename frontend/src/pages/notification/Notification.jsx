@@ -15,7 +15,7 @@ const NotificationPage = () => {
 		queryKey: ["notifications"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/notifications`, { withCredentials: true });
+				const res = await makeRequest.get('/notifications');
 				const data = res.data;
 				if (data.error) throw new Error(data.error || "Something went wrong");
 				return data;
@@ -28,7 +28,7 @@ const NotificationPage = () => {
 	const { mutate: deleteNotifications } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/notifications`, { withCredentials: true });
+				const res = await makeRequest.delete('/notifications');
 				const data = res.data;
 
 				if (data.error) throw new Error(data.error || "Something went wrong");

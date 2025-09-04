@@ -15,7 +15,7 @@ const Sidebar = ({ authUser }) => {
 	const { mutate: logout } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {}, { withCredentials: true });
+				const res = await makeRequest.post('/auth/logout');
 				const data = res.data;
 
 				if (data.error) {
