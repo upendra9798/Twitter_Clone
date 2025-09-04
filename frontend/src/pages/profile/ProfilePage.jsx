@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import Posts from "../../components/common/Posts";
@@ -23,9 +23,7 @@ const ProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { followMutation } = useFollow();
   const { updateMutation } = useUpdateUserProfile();
-  const fileInputRef = useRef(null);
 
-  // ✅ Fetch user via makeRequest instead of raw axios
   const { data: user, isLoading } = useQuery({
     queryKey: ["user", username],
     queryFn: async () => {
@@ -42,79 +40,89 @@ const ProfilePage = () => {
   if (isLoading) return <ProfileHeaderSkeleton />;
 
   return (
-    <div className="flex flex-col w-[600px] ml-[275px] border-x border-gray-700 min-h-screen">
+    <main className="flex-1 border-x border-neutral-800">
       {/* Header */}
-      <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full sticky top-0 z-10 bg-black bg-opacity-75 backdrop-blur-sm">
-        <Link to="/" className="rounded-full p-2 hover:bg-gray-900 transition-colors">
+      <div className="flex items-center gap-4 px-4 py-3 border-b border-neutral-800 sticky top-0 z-10 bg-black/80 backdrop-blur">
+        <Link to="/" className="rounded-full p-2 hover:bg-neutral-800/70 transition-colors">
           <FaArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h2 className="text-xl font-bold text-neutral-200">{user.fullName}</h2>
-          <p className="text-sm text-neutral-500">{user.tweets?.length || 0} posts</p>
+          <h2 className="text-xl font-bold text-white">{user.fullName}</h2>
+          <p className="text-sm text-neutral-600">{user.tweets?.length || 0} posts</p>
         </div>
       </div>
 
       {/* Banner & Profile Image */}
       <div className="relative">
-        <div className="aspect-[3/1] max-h-[200px]">
+        <div className="h-[200px] bg-neutral-800">
+          {user.bannerImage ? (
+            <img
+              src={user.bannerImage}
+              alt="Banner"
+              className="w-full h-full object-cover"
+            />
+          ) : null}
+        </div>
+        <div className="absolute -bottom-16 left-4">
           <img
-            src={user.bannerImage || "/cover.png"}
-            alt="Banner"
-            className="w-full h-full object-cover"
+            src={user.profileImage || "/avatar-placeholder.png"}
+            alt="Profile"
+            className="w-32 h-32 rounded-full border-4 border-black bg-neutral-800 object-cover"
           />
         </div>
-        <img
-          src={user.profileImage || "/avatar-placeholder.png"}
-          alt="Profile"
-          className="absolute -bottom-16 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
-        />
-        <button
-          onClick={() => setIsEditModalOpen(true)}
-          className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-full flex items-center gap-2"
-        >
-          <MdEdit /> Edit Profile
-        </button>
+        <div className="absolute right-4 bottom-4">
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="px-4 py-1.5 rounded-full border border-neutral-700 font-medium bg-transparent hover:bg-neutral-900 transition-colors"
+          >
+            Edit profile
+          </button>
+        </div>
       </div>
 
       {/* Profile Details */}
       <div className="mt-20 px-4">
-        <h2 className="text-xl font-bold text-neutral-200">{user.fullName}</h2>
-        <p className="text-neutral-500">@{user.username}</p>
-        {user.bio && <p className="mt-2 text-neutral-200">{user.bio}</p>}
+        <h2 className="text-xl font-bold text-white">{user.fullName}</h2>
+        <p className="text-neutral-600">@{user.username}</p>
+        {user.bio && <p className="mt-3 text-white whitespace-pre-wrap">{user.bio}</p>}
 
-        <div className="flex flex-wrap gap-4 text-neutral-500 mt-3">
+        <div className="flex flex-wrap gap-4 text-neutral-600 mt-3">
           {user.link && (
-            <span className="flex items-center gap-1">
-              <FaLink className="text-neutral-500" />{" "}
-              <a
-                href={user.link}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-400 hover:underline"
-              >
-                {user.link}
-              </a>
-            </span>
+            <a
+              href={user.link}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 hover:underline"
+            >
+              <FaLink className="w-4 h-4" />
+              {user.link.replace(/(^\w+:|^)\/\//, '')}
+            </a>
           )}
           <span className="flex items-center gap-1">
-            <IoCalendarOutline /> Joined {formatMemberSinceDate(user.createdAt)}
+            <IoCalendarOutline className="w-4 h-4" /> 
+            Joined {formatMemberSinceDate(user.createdAt)}
           </span>
         </div>
 
-        <div className="flex gap-6 mt-3">
-          <button className="hover:underline cursor-pointer">
-            <span className="text-neutral-200 font-bold">{user.following?.length || 0}</span>{" "}
-            <span className="text-neutral-500">Following</span>
+        <div className="flex gap-6 mt-3 text-neutral-600">
+          <button className="hover:underline">
+            <span className="text-white font-medium">{user.following?.length || 0}</span>{" "}
+            Following
           </button>
-          <button className="hover:underline cursor-pointer">
-            <span className="text-neutral-200 font-bold">{user.followers?.length || 0}</span>{" "}
-            <span className="text-neutral-500">Followers</span>
+          <button className="hover:underline">
+            <span className="text-white font-medium">{user.followers?.length || 0}</span>{" "}
+            Followers
           </button>
         </div>
       </div>
 
       {/* Posts */}
-      <div className="border-t border-gray-700 mt-4">
+      <nav className="border-b border-neutral-800">
+        <button className="px-4 py-4 text-[15px] text-white font-medium border-b-4 border-blue-500">
+          Posts
+        </button>
+      </nav>
+      <div className="pb-4">
         <Posts posts={POSTS} />
       </div>
 
@@ -126,7 +134,8 @@ const ProfilePage = () => {
           onUpdate={updateMutation.mutate}
         />
       )}
-    </div>
+    </main>
+    // </div>
   );
 };
 
