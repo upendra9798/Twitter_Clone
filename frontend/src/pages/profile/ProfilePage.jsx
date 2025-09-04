@@ -42,9 +42,9 @@ const ProfilePage = () => {
   if (isLoading) return <ProfileHeaderSkeleton />;
 
   return (
-    <div className="flex flex-col w-full max-w-screen-2xl mx-auto">
+    <div className="flex flex-col w-full">
       {/* Header */}
-      <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full">
+      <div className="flex items-center gap-4 p-3 border-b border-gray-700 w-full sticky top-0 z-10 bg-black">
         <Link to="/">
           <FaArrowLeft className="w-5 h-5 text-white" />
         </Link>
@@ -56,28 +56,28 @@ const ProfilePage = () => {
 
       {/* Banner & Profile Image */}
       <div className="relative w-full">
-        <div className="w-full h-[300px]">
+        <div className="w-full h-[200px]">
           <img
-            src={user.bannerImage || "/default-banner.jpg"}
+            src={user.bannerImage || "/cover.png"}
             alt="Banner"
             className="w-full h-full object-cover"
           />
         </div>
         <img
-          src={user.profileImage || "/default-avatar.png"}
+          src={user.profileImage || "/avatar-placeholder.png"}
           alt="Profile"
-          className="absolute -bottom-16 left-8 w-32 h-32 rounded-full border-4 border-black object-cover"
+          className="absolute -bottom-16 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
         />
         <button
           onClick={() => setIsEditModalOpen(true)}
-          className="absolute right-8 bottom-4 bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-full flex items-center gap-2"
+          className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-full flex items-center gap-2"
         >
           <MdEdit /> Edit Profile
         </button>
       </div>
 
       {/* Profile Details */}
-      <div className="mt-20 px-8 w-full">
+      <div className="mt-20 px-4 w-full">
         <h2 className="text-2xl font-bold">{user.fullName}</h2>
         <p className="text-gray-400">@{user.username}</p>
         <p className="mt-2 max-w-2xl">{user.bio}</p>
@@ -112,8 +112,10 @@ const ProfilePage = () => {
       </div>
 
       {/* Posts */}
-      <div className="mt-6 w-full">
-        <Posts posts={POSTS} />
+      <div className="border-t border-gray-700 mt-4">
+        <div className="max-w-[600px] mx-auto">
+          <Posts posts={POSTS} />
+        </div>
       </div>
 
       {/* Edit Profile Modal */}
