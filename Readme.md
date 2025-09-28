@@ -1,81 +1,177 @@
-Backend-> Install backend->routes->authRoutes->controllers->form database
-for signup(MongoDB) ->.env file->read .env in index/server-> connect database ->Form model
+# 🐦 Twitter Clone
 
+[![Made with React](https://img.shields.io/badge/Made_with-React-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
+A full-stack Twitter clone showcasing modern web development practices and real-time interactions. Built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring real-time updates and a responsive UI.
 
-(in Twitter folder)
-1. npm init -y 
-2. npm install express mongoose jsonwebtoken bcryptjs dotenv cors cookie-parser cloudinary
-3. npm i -D nodemon
-4. change these things in package.json: 
-  "type" : "module",
-  "scripts": {
-    "dev": "nodemon Backend/server.js", //updated bydefault on any change
-    "start": "node Backend/server.js"
-  },
-  "main": "Backend/server.js",
-Note:- Getting dev not found so deleted package and reinstall by:-(Make sure to save the file, see dot on file name)
-rm package-lock.json
-rm -r node_modules
-npm install 
+## 🚀 Quick Start
 
-5. In index/server.js form app with express and listen it and get(home page) //Home route(later change to use)
-Note:- As mongoDB is a noSQL database so there are collections not tables
-6. For simplicity of code we will make routes separately as we have to write routes for many things like auth,post,etc
-7. Make controllers section separate
-8. Make models folder for MONGODB
-9. Make auth route:
-      1. signup - first use get to check then change to post 
-      2. login,logout,etc
-      3. after checking make it use and transfer all inside data in auth controller using async fn
-10. Form mongo dv cluster and .env file in backend
-11. connect db in another file and import in index.js
+### Requirements
 
-12. Make user model
-13. To use req.body() for taking information of user use app.use(express.json()) in index
-14. Form signup controller and encrypt password with JWT
-15. Form jwt token for encrypting pass in lib-utils
-16. write JWT secret in .env
-OPEN GITBASH in terminal and type:- openssl rand -base64 32 to get JWT secret(random)
-17. Test it in postman for signup
-app.use(express.urlencoded({ extended: true })); // to parse form data
-use this if needed
-18. Login code and test it in postman
-19. Logout by token
-20. getMe route:- using protectRoute Middelware(used cookieParser)
-**********AUTHORIZATION PART DONE***********
+- Node.js (v14 or higher)
+- MongoDB
+- npm or yarn
 
-*********USER CONTROLLER********
-21. Created user routes and controllers for managing following, followers,seeing profile and update,changing password,suggested users
-22. Created user model
-23. For uploading profileImg and coverImg set up cloudinary in .env
-24. config it in index and use to upload img
+### Setup Steps
 
-********POST CONTROLLER*******
-25. Create post model 
-26. Make it's routes and controllers
+1. Clone the repository:
 
-********NOTIFICATIONS CONTROLLER*******
-27. Create notification model 
-26. Make it's routes and controllers
+```bash
+git clone https://github.com/upendra9798/twitter_clone.git
+cd twitter_clone
+```
 
-FRONTEND:-
-1. install tailwind:
-    npm install tailwindcss @tailwindcss/vite  
-  in frontend, make change in vite config, import in App.css
+1. Configure environment variables:
 
-2. npm i -D daisyui@latest , npm i react-router - in frontend
-   npm install react-icons
+Backend (create `.env` in backend folder):
 
-3. npm i @tanstack/react-query -> in frontend for using query
-4. npm install react-hot-toast -> in frontend for a toaster
-Note:- React Query (now renamed TanStack Query) is a powerful data-fetching and state management library for React applications.
-React Query helps you fetch, cache, update, and sync data from APIs effortlessly — especially when dealing with asynchronous operations like fetch, axios, etc.
+```env
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
 
-Note:- Basic syntax for writing mutation fn
-const { mutate: commentPost, isPending: isCommenting } = useMutation({
-		mutationFn: async () => {}
-		},
-		onSuccess: () => {},
-		onError: (error) => {},
-    })
+Frontend (create `.env` in frontend folder):
+
+```env
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+1. Install dependencies and run servers:
+
+```bash
+# Backend setup
+cd backend
+npm install
+npm run dev
+
+# Frontend setup (in new terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+1. Visit [http://localhost:5173](http://localhost:5173) in your browser
+
+## 🌟 Main Features
+
+### Authentication & Security
+
+- ✅ JWT-based authentication with HTTP-only cookies
+- 🔒 Secure password hashing with bcrypt
+- 🛡️ Protected routes with middleware
+- 🚪 User signup, login, and logout functionality
+
+### Profile Features
+
+- 👤 Customizable profile with picture and banner
+- ✏️ Edit profile information
+- 📊 Track following/followers
+- 🖼️ Cloudinary integration for image uploads
+
+### Post Management
+
+- 📝 Create and delete posts
+- 🖼️ Image attachments in posts
+- 💬 Comment on posts
+- ❤️ Like/Unlike functionality
+- 🔄 Repost capability
+
+### Social Features
+
+- 👥 Follow/Unfollow users
+- 🔔 Real-time notifications
+- 🎯 Suggested users
+- 💭 Interactive comments
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **React.js** - UI library
+- **TailwindCSS** - Styling
+- **React Query** - Server state management
+- **React Router** - Navigation
+- **Axios** - HTTP client
+- **React Hot Toast** - Notifications
+
+### Backend
+
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication
+- **Bcrypt** - Password hashing
+- **Cloudinary** - Image hosting
+
+## 🚀 Installation Guide
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB
+- npm or yarn
+
+## 💡 Implementation Details
+
+### Authentication Flow
+
+- JWT-based authentication using HTTP-only cookies
+- Protected routes using custom middleware
+- Secure password hashing with bcrypt
+- Token-based session management
+
+### Data Models
+
+1. User Model:
+   - Profile information
+   - Following/Followers relationships
+   - Authentication details
+
+2. Post Model:
+   - Text content
+   - Image attachments
+   - Likes and comments
+   - Timestamps
+
+3. Notification Model:
+   - User interactions
+   - System notifications
+   - Read/Unread status
+
+### API Integration
+
+- React Query for efficient data fetching and caching
+- Axios for HTTP requests
+- Real-time updates using React Query's invalidation
+
+## 🔒 Security Features
+
+- HTTP-only cookies for JWT
+- Password hashing
+- Protected API routes
+- CORS configuration
+- Input validation
+
+## 🎯 Future Enhancements
+
+- [ ] Real-time chat
+- [ ] Tweet bookmarks
+- [ ] Tweet analytics
+- [ ] Media attachments
+- [ ] Advanced search
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
+---
+
+Created with ❤️ by [Upendra Kushwaha](https://github.com/upendra9798)

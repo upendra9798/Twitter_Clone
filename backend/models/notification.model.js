@@ -7,7 +7,7 @@ const notificationSchema = new mongoose.Schema(
       required: true,
     },
     to: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId, //this type tells Mongoose that the field will store an ObjectId.
       ref: "User",
       required: true,
     },
