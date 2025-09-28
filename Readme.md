@@ -30,11 +30,11 @@ cd twitter_clone
 Backend (create `.env` in backend folder):
 
 ```env
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+MONGODB_URI=mongodb_uri
+JWT_SECRET=jwt_secret
+CLOUDINARY_CLOUD_NAME=cloud_name
+CLOUDINARY_API_KEY=api_key
+CLOUDINARY_API_SECRET=api_secret
 ```
 
 Frontend (create `.env` in frontend folder):
