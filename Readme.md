@@ -8,6 +8,213 @@
 
 A full-stack Twitter clone showcasing modern web development practices and real-time interactions. Built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring real-time updates and a responsive UI.
 
+## 🏗️ Architecture Overview
+
+### System Architecture Diagram
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Frontend      │    │    Backend       │    │   Database      │
+│   (React.js)    │◄──►│   (Node.js/      │◄──►│   (MongoDB)     │
+│                 │    │    Express)      │    │                 │
+│ • Components    │    │ • REST API       │    │ • User          │
+│ • React Query   │    │ • Auth Middleware│    │ • Post          │
+│ • TailwindCSS   │    │ • JWT Tokens     │    │ • Notification  │
+│ • React Router  │    │ • File Upload    │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌──────────────────┐
+                    │   Third Party    │
+                    │   Services       │
+                    │                  │
+                    │ • Cloudinary     │
+                    │   (Image Host)   │
+                    └──────────────────┘
+```
+
+### Architecture Layers
+
+#### 1. **Presentation Layer (Frontend - React.js)**
+```
+src/
+├── components/           # Reusable UI components
+│   ├── common/          # Shared components (Post, Posts, Sidebar)
+│   ├── skeletons/       # Loading placeholders
+│   └── svgs/            # SVG icons and graphics
+├── pages/               # Route-based page components
+│   ├── auth/           # Login, Signup pages
+│   ├── home/           # Home feed and CreatePost
+│   ├── profile/        # User profile pages
+│   └── notification/   # Notifications page
+├── hooks/              # Custom React hooks
+│   ├── useFollow.jsx   # Follow/Unfollow logic
+│   ├── useMutations.js # API mutations
+│   └── useQueries.js   # Data fetching hooks
+├── utils/              # Utility functions
+│   └── api.js          # API configuration
+└── App.jsx             # Main app component with routing
+```
+
+**Key Features:**
+- **Component-Based Architecture**: Modular, reusable components
+- **State Management**: React Query for server state, React hooks for local state
+- **Routing**: React Router for SPA navigation
+- **Styling**: TailwindCSS with DaisyUI components
+- **Real-time Updates**: Optimistic updates with React Query invalidation
+
+#### 2. **Application Layer (Backend - Node.js/Express)**
+```
+backend/
+├── controllers/         # Business logic handlers
+│   ├── auth.controller.js      # Authentication logic
+│   ├── user.controller.js      # User management
+│   ├── post.controller.js      # Post operations
+│   └── notification.controller.js # Notifications
+├── middleware/          # Custom middleware
+│   └── protectRoute.js  # JWT authentication
+├── models/             # Database schemas (Mongoose)
+│   ├── user.model.js   # User data structure
+│   ├── post.model.js   # Post data structure
+│   └── notification.model.js # Notification structure
+├── routes/             # API route definitions
+│   ├── auth.routes.js  # Auth endpoints
+│   ├── user.routes.js  # User endpoints
+│   ├── post.routes.js  # Post endpoints
+│   └── notification.routes.js # Notification endpoints
+├── lib/utils/          # Utility functions
+│   └── generateToken.js # JWT token generation
+├── db/                 # Database configuration
+│   └── connectMongoDB.js # MongoDB connection
+└── index.js            # Express server setup
+```
+
+**Key Features:**
+- **RESTful API Design**: Clean, resource-based endpoints
+- **Middleware Chain**: Authentication, CORS, body parsing
+- **MVC Pattern**: Separation of routes, controllers, and models
+- **Error Handling**: Centralized error management
+- **Security**: JWT tokens, bcrypt hashing, CORS configuration
+
+#### 3. **Data Layer (MongoDB)**
+```
+Database Collections:
+├── users               # User profiles and authentication
+│   ├── _id, username, email, password (hashed)
+│   ├── fullName, followers[], following[]
+│   ├── profileImg, coverImg (Cloudinary URLs)
+│   └── bio, link, createdAt, updatedAt
+├── posts               # User posts/tweets
+│   ├── _id, user (ObjectId ref), text, img
+│   ├── likes[] (ObjectId refs), comments[]
+│   └── createdAt, updatedAt
+└── notifications       # User notifications
+    ├── _id, from (ObjectId), to (ObjectId), type
+    ├── read (boolean), post (ObjectId ref)
+    └── createdAt
+```
+
+### Data Flow Architecture
+
+#### 1. **Authentication Flow**
+```
+User Login Request → Express Route → Auth Controller → 
+Password Verification (bcrypt) → JWT Generation → 
+HTTP-Only Cookie → Protected Route Access
+```
+
+#### 2. **Post Creation Flow**
+```
+Frontend Form → Image Upload (Cloudinary) → 
+API Request (with JWT) → Post Controller → Database Save → 
+React Query Cache Invalidation → UI Re-render
+```
+
+#### 3. **Real-time Updates Flow**
+```
+User Action → Optimistic Update → API Call → 
+Database Update → React Query Invalidation → 
+Background Refetch → UI Sync
+```
+
+### API Architecture
+
+#### RESTful Endpoints Structure
+```
+/api/auth/*             # Authentication routes
+├── POST /signup        # User registration
+├── POST /login         # User login
+├── POST /logout        # User logout
+└── GET /me             # Get current user
+
+/api/users/*            # User management
+├── GET /profile/:username    # Get user profile
+├── GET /suggested           # Get suggested users
+├── POST /follow/:id         # Follow/unfollow user
+└── POST /update             # Update profile
+
+/api/posts/*            # Post management
+├── GET /all            # Get all posts (feed)
+├── GET /following      # Get posts from following
+├── GET /likes/:id      # Get user's liked posts
+├── GET /user/:username # Get user's posts
+├── POST /create        # Create new post
+├── POST /like/:id      # Like/unlike post
+├── POST /comment/:id   # Comment on post
+└── DELETE /:id         # Delete post
+
+/api/notifications/*    # Notification system
+├── GET /              # Get user notifications
+└── DELETE /           # Delete all notifications
+```
+
+### Security Architecture
+
+#### Authentication & Authorization
+- **JWT Tokens**: Stored in HTTP-only cookies for XSS protection
+- **Password Security**: Bcrypt hashing with salt rounds
+- **Route Protection**: Middleware-based authentication checks
+- **CORS Policy**: Configured for cross-origin requests with credentials
+
+#### Data Security
+- **Input Validation**: Mongoose schema validation
+- **File Upload Security**: Cloudinary integration with type/size limits
+- **Environment Variables**: Sensitive data stored securely
+- **Error Handling**: Sanitized error messages to prevent information leakage
+
+### Deployment Architecture
+
+```
+Development Environment:
+Frontend (Vite - localhost:5173) ←→ Backend (Node.js - localhost:5000) ←→ MongoDB (Local/Atlas)
+
+Production Environment:
+Frontend (Vercel) ←→ Backend (Render) ←→ MongoDB Atlas
+                           ↓
+                    Cloudinary (Image CDN)
+```
+
+### Performance Optimizations
+
+#### Frontend Optimizations
+- **React Query Caching**: Automatic data caching and synchronization
+- **Code Splitting**: Route-based lazy loading with React Router
+- **Image Optimization**: Cloudinary transformations and lazy loading
+- **Bundle Optimization**: Vite's optimized build process
+
+#### Backend Optimizations
+- **Database Indexing**: MongoDB indexes on frequently queried fields
+- **Middleware Efficiency**: Optimized request processing pipeline
+- **Error Handling**: Proper HTTP status codes and structured responses
+- **CORS Configuration**: Environment-specific origin configurations
+
+#### Database Design Patterns
+- **Document References**: User references in posts and notifications
+- **Embedded Documents**: Comments embedded within posts
+- **Indexing Strategy**: Indexes on username, email, and timestamps
+- **Data Relationships**: Proper foreign key relationships using ObjectIds
+
 ## 🚀 Quick Start
 
 ### Requirements
