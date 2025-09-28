@@ -34,109 +34,301 @@ A full-stack Twitter clone showcasing modern web development practices and real-
                     └──────────────────┘
 ```
 
-### Architecture Layers
+### 🏗️ Architecture Layers
 
-#### 1. **Presentation Layer (Frontend - React.js)**
-```
-src/
-├── components/           # Reusable UI components
-│   ├── common/          # Shared components (Post, Posts, Sidebar)
-│   ├── skeletons/       # Loading placeholders
-│   └── svgs/            # SVG icons and graphics
-├── pages/               # Route-based page components
-│   ├── auth/           # Login, Signup pages
-│   ├── home/           # Home feed and CreatePost
-│   ├── profile/        # User profile pages
-│   └── notification/   # Notifications page
-├── hooks/              # Custom React hooks
-│   ├── useFollow.jsx   # Follow/Unfollow logic
-│   ├── useMutations.js # API mutations
-│   └── useQueries.js   # Data fetching hooks
-├── utils/              # Utility functions
-│   └── api.js          # API configuration
-└── App.jsx             # Main app component with routing
-```
+<div align="center">
 
-**Key Features:**
-- **Component-Based Architecture**: Modular, reusable components
-- **State Management**: React Query for server state, React hooks for local state
-- **Routing**: React Router for SPA navigation
-- **Styling**: TailwindCSS with DaisyUI components
-- **Real-time Updates**: Optimistic updates with React Query invalidation
+| Layer | Technology | Purpose |
+|-------|------------|----------|
+| 🎨 **Frontend** | React.js + Vite | User Interface & Experience |
+| ⚙️ **Backend** | Node.js + Express | API & Business Logic |
+| 🗃️ **Database** | MongoDB + Mongoose | Data Storage & Management |
+| ☁️ **Storage** | Cloudinary | Image & Media Hosting |
 
-#### 2. **Application Layer (Backend - Node.js/Express)**
-```
-backend/
-├── controllers/         # Business logic handlers
-│   ├── auth.controller.js      # Authentication logic
-│   ├── user.controller.js      # User management
-│   ├── post.controller.js      # Post operations
-│   └── notification.controller.js # Notifications
-├── middleware/          # Custom middleware
-│   └── protectRoute.js  # JWT authentication
-├── models/             # Database schemas (Mongoose)
-│   ├── user.model.js   # User data structure
-│   ├── post.model.js   # Post data structure
-│   └── notification.model.js # Notification structure
-├── routes/             # API route definitions
-│   ├── auth.routes.js  # Auth endpoints
-│   ├── user.routes.js  # User endpoints
-│   ├── post.routes.js  # Post endpoints
-│   └── notification.routes.js # Notification endpoints
-├── lib/utils/          # Utility functions
-│   └── generateToken.js # JWT token generation
-├── db/                 # Database configuration
-│   └── connectMongoDB.js # MongoDB connection
-└── index.js            # Express server setup
+</div>
+
+---
+
+#### 🎨 **Frontend Layer - React.js Ecosystem**
+
+<details>
+<summary>📁 <strong>Click to view Frontend Structure</strong></summary>
+
+```bash
+🗂️ src/
+├── 🧩 components/           # Reusable UI Components
+│   ├── 🔧 common/          # Shared Components
+│   │   ├── 📝 Post.jsx     # Individual post component  
+│   │   ├── 📋 Posts.jsx    # Posts feed container
+│   │   ├── 🏠 Sidebar.jsx  # Navigation sidebar
+│   │   └── 📊 RightPanel.jsx # Suggestions panel
+│   ├── ⏳ skeletons/       # Loading Placeholders
+│   └── 🎨 svgs/           # SVG Icons & Graphics
+├── 📄 pages/               # Route-based Pages
+│   ├── 🔐 auth/           # Authentication (Login/Signup)
+│   ├── 🏠 home/           # Home Feed & CreatePost
+│   ├── 👤 profile/        # User Profile Management
+│   └── 🔔 notification/   # Notifications Center
+├── 🎣 hooks/              # Custom React Hooks
+│   ├── 👥 useFollow.jsx   # Follow/Unfollow logic
+│   ├── 🔄 useMutations.js # API mutation hooks
+│   └── 📊 useQueries.js   # Data fetching hooks
+├── 🛠️ utils/              # Utility Functions
+│   └── 🌐 api.js          # API configuration
+└── 📱 App.jsx             # Main App with Routing
 ```
 
-**Key Features:**
-- **RESTful API Design**: Clean, resource-based endpoints
-- **Middleware Chain**: Authentication, CORS, body parsing
-- **MVC Pattern**: Separation of routes, controllers, and models
-- **Error Handling**: Centralized error management
-- **Security**: JWT tokens, bcrypt hashing, CORS configuration
+</details>
 
-#### 3. **Data Layer (MongoDB)**
-```
-Database Collections:
-├── users               # User profiles and authentication
-│   ├── _id, username, email, password (hashed)
-│   ├── fullName, followers[], following[]
-│   ├── profileImg, coverImg (Cloudinary URLs)
-│   └── bio, link, createdAt, updatedAt
-├── posts               # User posts/tweets
-│   ├── _id, user (ObjectId ref), text, img
-│   ├── likes[] (ObjectId refs), comments[]
-│   └── createdAt, updatedAt
-└── notifications       # User notifications
-    ├── _id, from (ObjectId), to (ObjectId), type
-    ├── read (boolean), post (ObjectId ref)
-    └── createdAt
+**✨ Frontend Features:**
+> 🧱 **Component Architecture** → Modular & reusable components  
+> 🗂️ **State Management** → React Query + React Hooks  
+> 🗺️ **Routing System** → React Router for SPA navigation  
+> 💅 **Modern Styling** → TailwindCSS + DaisyUI components  
+> ⚡ **Real-time Updates** → Optimistic UI with automatic sync
+
+---
+
+#### ⚙️ **Backend Layer - Node.js API Server**
+
+<details>
+<summary>🔧 <strong>Click to view Backend Architecture</strong></summary>
+
+```bash
+🗂️ backend/
+├── 🎮 controllers/          # Business Logic Handlers
+│   ├── 🔐 auth.controller.js      # Authentication & Authorization
+│   ├── 👤 user.controller.js      # User Management & Profiles
+│   ├── 📝 post.controller.js      # Post CRUD Operations
+│   └── 🔔 notification.controller.js # Notification System
+├── 🛡️ middleware/           # Custom Middleware
+│   └── 🔒 protectRoute.js   # JWT Authentication Guard
+├── 📊 models/              # Database Schemas (Mongoose)
+│   ├── 👤 user.model.js    # User data structure
+│   ├── 📝 post.model.js    # Post data structure  
+│   └── 🔔 notification.model.js # Notification structure
+├── 🛣️ routes/              # API Route Definitions
+│   ├── 🔐 auth.routes.js   # Authentication endpoints
+│   ├── 👤 user.routes.js   # User management endpoints
+│   ├── 📝 post.routes.js   # Post management endpoints
+│   └── 🔔 notification.routes.js # Notification endpoints
+├── 📚 lib/utils/           # Utility Functions
+│   └── 🔑 generateToken.js # JWT token generation
+├── 🗃️ db/                 # Database Configuration
+│   └── 🔗 connectMongoDB.js # MongoDB connection
+└── 🚀 index.js            # Express server setup
 ```
 
-### Data Flow Architecture
+</details>
 
-#### 1. **Authentication Flow**
-```
-User Login Request → Express Route → Auth Controller → 
-Password Verification (bcrypt) → JWT Generation → 
-HTTP-Only Cookie → Protected Route Access
+**🔥 Backend Features:**
+> 🌐 **RESTful API Design** → Clean, resource-based endpoints  
+> 🔗 **Middleware Pipeline** → Authentication, CORS, parsing  
+> 📐 **MVC Architecture** → Separation of concerns  
+> ⚠️ **Error Handling** → Centralized error management  
+> 🔐 **Security First** → JWT tokens, bcrypt, CORS protection
+
+---
+
+#### 🗃️ **Database Layer - MongoDB Collections**
+
+<details>
+<summary>📊 <strong>Click to view Database Schema</strong></summary>
+
+```javascript
+// 👤 Users Collection
+{
+  _id: ObjectId,
+  username: String (unique),
+  email: String (unique), 
+  password: String (hashed with bcrypt),
+  fullName: String,
+  profileImg: String (Cloudinary URL),
+  coverImg: String (Cloudinary URL),
+  bio: String,
+  link: String,
+  followers: [ObjectId], // References to User IDs
+  following: [ObjectId], // References to User IDs
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// 📝 Posts Collection  
+{
+  _id: ObjectId,
+  user: ObjectId (ref: 'User'),
+  text: String,
+  img: String (Cloudinary URL),
+  likes: [ObjectId], // User IDs who liked
+  comments: [{
+    text: String,
+    user: ObjectId (ref: 'User'),
+    createdAt: Date
+  }],
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// 🔔 Notifications Collection
+{
+  _id: ObjectId,
+  from: ObjectId (ref: 'User'),
+  to: ObjectId (ref: 'User'), 
+  type: String, // 'follow', 'like', 'comment'
+  read: Boolean (default: false),
+  post: ObjectId (ref: 'Post'), // Optional
+  createdAt: Date
+}
 ```
 
-#### 2. **Post Creation Flow**
-```
-Frontend Form → Image Upload (Cloudinary) → 
-API Request (with JWT) → Post Controller → Database Save → 
-React Query Cache Invalidation → UI Re-render
+</details>
+
+**💾 Database Features:**
+> 📋 **Document-Based** → Flexible JSON-like documents  
+> 🔗 **Relationships** → ObjectId references between collections  
+> 📈 **Indexing** → Optimized queries on username, email  
+> 🔄 **Validation** → Mongoose schema validation  
+> ⚡ **Performance** → Efficient queries with proper indexing
+
+### 🔄 Data Flow Architecture
+
+<div align="center">
+
+```mermaid
+graph TD
+    A[👤 User] --> B[🎨 Frontend]
+    B --> C[⚙️ Backend API]
+    C --> D[🗃️ Database]
+    C --> E[☁️ Cloudinary]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
 ```
 
-#### 3. **Real-time Updates Flow**
+</div>
+
+---
+
+#### 🔐 **Authentication Flow**
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant F as 🎨 Frontend
+    participant B as ⚙️ Backend
+    participant D as 🗃️ Database
+    
+    U->>F: Enter credentials
+    F->>B: POST /api/auth/login
+    B->>D: Verify user exists
+    D-->>B: User data
+    B->>B: Compare password (bcrypt)
+    B->>B: Generate JWT token
+    B-->>F: Set HTTP-only cookie
+    F-->>U: Redirect to dashboard
 ```
-User Action → Optimistic Update → API Call → 
-Database Update → React Query Invalidation → 
-Background Refetch → UI Sync
+
+**🔑 Step-by-step Process:**
+1. 📝 **User Input** → Enter username/password
+2. 🌐 **API Request** → POST to /api/auth/login
+3. 🔍 **Verification** → Check user exists & password match
+4. 🎫 **Token Generation** → Create JWT with user info
+5. 🍪 **Cookie Setting** → Store token in HTTP-only cookie
+6. ✅ **Access Granted** → Redirect to protected routes
+
+---
+
+#### 📝 **Post Creation Flow**
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant F as 🎨 Frontend
+    participant B as ⚙️ Backend
+    participant C as ☁️ Cloudinary
+    participant D as 🗃️ Database
+    participant Q as 🔄 React Query
+    
+    U->>F: Create post with image
+    F->>F: Optimistic UI update
+    F->>B: POST /api/posts/create
+    B->>C: Upload image
+    C-->>B: Return image URL
+    B->>D: Save post data
+    D-->>B: Confirm saved
+    B-->>F: Return new post
+    F->>Q: Invalidate cache
+    Q->>Q: Refetch posts
+    Q-->>F: Update UI with real data
 ```
+
+**📋 Step-by-step Process:**
+1. ✍️ **User Creates** → Write post + select image
+2. ⚡ **Optimistic Update** → Show post immediately
+3. ☁️ **Image Upload** → Send to Cloudinary
+4. 💾 **Data Storage** → Save to MongoDB
+5. 🔄 **Cache Refresh** → React Query invalidation
+6. 🎨 **UI Sync** → Real data replaces optimistic
+
+---
+
+#### ⚡ **Real-time Updates Flow**
+
+```mermaid
+sequenceDiagram
+    participant U1 as 👤 User A
+    participant U2 as 👤 User B  
+    participant F1 as 🎨 Frontend A
+    participant F2 as 🎨 Frontend B
+    participant B as ⚙️ Backend
+    participant D as 🗃️ Database
+    participant Q1 as 🔄 React Query A
+    participant Q2 as 🔄 React Query B
+    
+    U1->>F1: Like a post
+    F1->>F1: Optimistic like
+    F1->>B: POST /api/posts/like/:id
+    B->>D: Update likes array
+    B->>D: Create notification
+    D-->>B: Confirm updates
+    B-->>F1: Return success
+    
+    Note over F2,Q2: Meanwhile, for other users...
+    Q2->>Q2: Background refetch (5min interval)
+    Q2->>B: GET /api/posts/all
+    B->>D: Fetch latest posts
+    D-->>B: Updated posts with new likes
+    B-->>Q2: Return fresh data
+    Q2-->>F2: Update UI automatically
+    F2-->>U2: See real-time updates
+```
+
+**🔄 Step-by-step Process:**
+1. 👆 **User Interaction** → Like, comment, or follow
+2. ⚡ **Immediate Feedback** → Optimistic UI update
+3. 🌐 **API Call** → Send request to backend
+4. 💾 **Database Update** → Modify data + create notifications
+5. 🔄 **Cache Strategy** → React Query background refetch
+6. 🌍 **Global Sync** → All users see updates automatically
+
+---
+
+<div align="center">
+
+### 🎯 **Data Flow Benefits**
+
+| Feature | Benefit | Implementation |
+|---------|---------|----------------|
+| ⚡ **Optimistic Updates** | Instant UI feedback | React Query mutations |
+| 🔄 **Background Sync** | Always fresh data | Automatic refetching |
+| 🍪 **Secure Auth** | XSS protection | HTTP-only cookies |
+| 📱 **Responsive UI** | Smooth interactions | TailwindCSS + React |
+| 🚀 **Performance** | Fast load times | Efficient caching |
+
+</div>
 
 ### API Architecture
 
